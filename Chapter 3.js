@@ -67,14 +67,15 @@
     JS, but rather, any programming language that uses binary floating-point numbers*/
 
 //On a site you found, it shows the value that is actually stored in float:
-    0.1
-    //Actually stores as:
-    const x = 0.100000001490116119384765625
-    //So 
-    0.2
-    const y = 0.20000000298023223876953125
-    //and 
-    0.3
-    const z = 0.300000011920928955078125
+    const x = 0.1
+    //Actually stores as: 0.100000001490116119384765625
 
-    console.log(z - y);
+    const y = 0.2
+    //Actually stores as: 0.20000000298023223876953125
+    
+    const z = 0.3
+    //Actually stores as: 0.300000011920928955078125
+
+    console.log(z - y); //The result is 0.10000000894069672, which means:
+    z - y === x //Is still false
+
