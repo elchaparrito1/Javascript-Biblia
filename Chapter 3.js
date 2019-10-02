@@ -62,8 +62,8 @@
   x == .1 //false: .3-.2 is not equal to .1
   y == .1 //true: .2-.1 is equal to .1
 
-  /*B/c of rounding error, the diff between the approximations of .3 and .2 is not 
-    exatly the same as the diff between .2 and .1. This problem is not specific to
+  /*b/c of rounding error, the diff between the approximations of .3 and .2 is not 
+    exactly the same as the diff between .2 and .1. This problem is not specific to
     JS, but rather, any programming language that uses binary floating-point numbers*/
 
 //On a site you found, it shows the value that is actually stored in float:
@@ -78,4 +78,63 @@
 
     console.log(z - y); //The result is 0.10000000894069672, which means:
     z - y === x //Is still false
+
+    //Articles that help in understanding this better:
+
+    //Aside on how Binary works:
+        //Snippets to remember about binary code (https://medium.com/basecs/bits-bytes-building-with-binary-13cb4289aafa):
+        //It counts in bases of 2, so 2^0, 2^1, 2^2, etc.
+    
+        //Numbers one through 5 look like this: 1, 10, 11, 100, and 101.
+
+        //The conversion down to binary is quite complex, but at the heart, the conversion is done using the base 2s. 
+            //Given a random number, first rule is you can't start with a base 2 higher than the given number. 
+            //Then, you would etch out each power of 2 and minus from the given number. If the given base 2 can minus from it, then it would be a 1 in binary. 
+            //If it cannot, then it would be 0. You follow this process until reaching zero for the given number.
+    
+        /*Letters would be similar process. For instance, F is the 6th number of the alphabet, so our given 
+        number would be 6. There are 8 bytes again or 8 digits, and for letters, lowercase always starts with 
+        0110, so your binary for the letter F would be: 01100110.*/
+
+    //Remember that 8 bits make up a byte. And a byte can string together 256 different combinations (Remember powers of 2? 2 to the power of 8 is 256.).
+    
+    /*A 16-bit machine would break up and process 16 bits at a time. The number of bits that are processed at a time are known as a computer word, so 
+    we can think of bits as the “letters” that make up a computer word.*/
+
+    /*Most computers now have a word length of 32 or 64 bits. And now you know what that means: that your machine passes around and processes 32 
+    or 64 bits at a time. In other words, your computer processes binary strings that are 32 or 64 digits long! (a single letter would 
+    require 8 bits to intepret and process*/
+    
+    //Video about numbers in JS (https://www.youtube.com/watch?v=MqHDDtVYJRI&feature=youtu.be):
+    
+    //Test Case Two: 0.1 + 0.2 = 0.30000000000000004
+        /*The tricky part of this expression is that it seems like crazy town. Where did the 4 come 
+        from? Something I hadn’t considered until I spent an afternoon converting numbers to binary 
+        and back is that it probably wasn’t intended to be a 4.*/
+        
+            //100 in binary is 4. (2² = 4, 4–4 =0, our binary represents the places filled by 2² 2¹ 2⁰).
+            /*In JavaScript numbers, generally, any digits that exceed the 52 bits provided by the fraction 
+            (or significand) are assumed to be 0 and discarded.*/
+            /*Numbers entered into JavaScript are decimal floating-point numbers and are then internally represented as binary floating-point numbers. That conversion for decimal floating-point numbers whose prime factors include anything other than 2 will lead to imperfect results. 
+                For example —
+                    0.125 in decimal = 125/1000 = 1/8 = 0.001 in binary
+                    0.1 in decimal = 1/10 = 1/2*5
+                    0.2 in decimal = 1/20 = 1/2*2*5
+            */
+    
+    //Null vs Undefined
+        //null is a language keyword that evaluates to a special value that is usually used to indicate the absence of value
+            //using typeof operator on ull returns the string "object", indicating that null can be thought of as a speical object.
+            //In practice, however, this is just regarded as its own type and can be used to indicate no value for numbers, strings, and objects.
+
+        //undefined represents a deeper kind of absence.
+            //It indicates a value that has not been declared and will indicate when an object or array does not exist.
+            //It is also returned by functions that have no return value.
+
+        //== operator considers undefined and null to be equal.
+        //Both are falsy values, and neither have any properties or methods.
+        //Consider undefined to be a system-level, unexpected, or error-like absence of a value
+        //Consider null to be a program-level, normal or expected absence of a value
+
+    
 
