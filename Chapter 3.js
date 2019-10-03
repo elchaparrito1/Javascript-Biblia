@@ -204,3 +204,7 @@ them as different entities.*/
     typeof b;  // "object"
     a == b  // true
     a === b // false
+
+/*This explains why trying to assign properties to a primitive doesn't work, but also doesn't throw an 
+error. Assigning the property succeeds, but the property is set on a wrapper object which is immediately 
+destroyed. So when you go to look up the property later, there is nothing there anymore.*/
