@@ -136,5 +136,53 @@
         //Consider undefined to be a system-level, unexpected, or error-like absence of a value
         //Consider null to be a program-level, normal or expected absence of a value
 
-    
+//3.5 The Global Object is a regular object that serves a very important purpose:
+    //the properties of this object are the globally defined symbols that are available to a JS program.
+    /*When the JS intepreter starts, or whenever a web broser loads a new page, it creates a new 
+    global object and gives it an intial set of properties that define:*/
+      //global properties like undefined, Infinity, and NaN
+      //global functions like isNaN(), parseInt(), and eval()
+      //constructor functions like Date(), RegExp(), String(), Object(), and Array()
+      //global objects like Math and JSON
 
+    /*In the top-level code that is not part of a function, you can use the keyword 
+    "this" to reference the global object:*/
+    let global = this;
+    console.log(global);
+
+  /*The Window object serves as the global object for all JS code contained in the browser window it represents.
+  This global Window has a self-referential "window" property that can be used instead of "this" to refere to the 
+  global object.*/
+  console.log(window === this);
+  //The Window object defines the core global properties.
+
+  /*Important NOTE!! - When created, this global object defines all of JS's predefined global values. But
+  it also holds program-defined globals as well. If you declare a global variable, that variable is a property of it*/
+  //A "true" global variable doesn't have the var, let, or const keyword:
+
+test="stuff";
+dateBaby = new Date();
+
+console.log(window.test);
+console.log(window);
+console.log(window.dateBaby); //If dateBaby has const in front of it:
+
+/*With this, all scopes will see it. Variables with the var keyword are local to the scope that they were declared.
+A variable will be "global to window" (property of window object) only if you declare it in the window scope, 
+making it global to the browsers that usually use window as the global scope.*/
+
+//3.6 Wrapper Objects:
+/*JS objects are composite values: they are a collection of properties or named values. When the value is a function
+we refer to this as a method.*/
+
+//We've also seent aht strings have properties and methods:
+  let s = "hello world";
+  let word = s.substring(s.indexOf(" ")+1, s.length); //Using string properties
+    //substring() - The substring() method extracts the characters from a string, between two specified indices, and returns the new sub string.
+    //indexOf() - The indexOf() method returns the position of the first occurrence of a specified value in a string.
+  console.log(word);
+
+//Important: Strings are not objects, however, so why do they have properties?
+  /*Whenever you try to refer to a property of a string "s", JS converts the string value to an object
+  as if by calling new String(s). This object inherits string methods and is used to resolve the property
+  reference. Once the property reference has been resolved, the newly created object is discarded*/
