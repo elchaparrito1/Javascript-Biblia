@@ -186,3 +186,21 @@ we refer to this as a method.*/
   /*Whenever you try to refer to a property of a string "s", JS converts the string value to an object
   as if by calling new String(s). This object inherits string methods and is used to resolve the property
   reference. Once the property reference has been resolved, the newly created object is discarded*/
+
+//For example:
+    const str = 'hello';
+    const upper = str.toUpperCase();
+    console.log(upper); // --> HELLO
+
+//The above essentially translates to:
+    const upper = (new String(str)).toUpperCase()
+
+/*JavaScript coerces wrapper objects into the wrapped primitive values as necessary. The == equality 
+will treat a value and its wrapper object as equal, while the === strict equality operator will treat 
+them as different entities.*/
+    const a = 'hello';             // primitive
+    const b = new String('hello'); // wrapper object
+    typeof a;  // "string"
+    typeof b;  // "object"
+    a == b  // true
+    a === b // false
