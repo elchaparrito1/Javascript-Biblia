@@ -208,3 +208,66 @@ them as different entities.*/
 /*This explains why trying to assign properties to a primitive doesn't work, but also doesn't throw an 
 error. Assigning the property succeeds, but the property is set on a wrapper object which is immediately 
 destroyed. So when you go to look up the property later, there is nothing there anymore.*/
+
+//Note that it is possible to create explicitly wrapper objects:
+    let n = 1, s = "hi", b = true
+    const num = new Number(n);
+    const str = new String(s);
+    const bool = new Boolean(b);
+    //This, however, is almost never necessary or useful.
+    //The typeof operator will show the difference between a primitive value and a wrapper object
+    //The behavior or n vs num or s vs str, etc. is usually the same, but not always.
+
+//3.7 - Immutable Primitve Values and Mutable Object References
+    /*There is a fundamental difference in JS between primitives values (undefined, null, booleans, 
+    numbers and strings) and objects (functions and arrays):*/
+        //Primitives are immutable
+            //This is obvious for say numbers or booleans (it doens't even make sense to change the value of a number)
+            //Not so obvious with a string though, b/c they're like arrays of characters.
+            /*In fact, methods on strings (str => wrapper obj(String()) => global object) which appear to 
+            change the string are simply returning a new string*/
+            let s = "hello";
+            s.toUpperCase(); //returns "HELLO" but doesn't alter s
+            console.log(s); //returns "hello"
+
+            //Primitives are also compared by VALUE.
+                //two values are the same only if they have the same value
+                //Again, seems clear for numbers or booleans, b/c there is no other way they could be compared
+
+        //Objects are mutable
+            //This is obvious to you:
+            let o = {x:1};
+            o.y = 3;
+
+            //Objects are not compared by value, even if they share the same properties/values:
+            let o = {x:1}; let m = {x:1}
+            o === m //returns false
+
+            //Objects are sometimes called reference types to distinguish them from JS's primitives types.
+            //So objects are compared by REFERENCE
+                //two objects are the same if, and only if they make reference to the same object:
+                let a = [];
+                let b = a;
+                b === a; // returns true
+
+                let c = [];
+                let d = [];
+                c === d; // returns false
+            //Assigning the object or array to a variable assigns the REFERENCE.
+            //It does not create a new copy of the array.
+
+            //If we want to compare two objects or arrays, we must compare their properities or elements as follows:
+                function equalArrays(a,b) {
+                    if (a.length != b.length) return false;
+                    for (let i = 0; i < a.length; i++) {
+                        if (a[i] !== b[i]) return false;
+                    }
+                    return true;
+                }
+
+//3.8 - Type Conversions
+    //JS is very flexible about types of values it requires.
+        //If it wants a string, it will convert whateer value you give it to a string:
+        10 + " objects" // => "10 objects"
+        //or a number:
+        "7" * "4"; // => 28
