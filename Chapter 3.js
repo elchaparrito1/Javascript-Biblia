@@ -271,3 +271,54 @@ destroyed. So when you go to look up the property later, there is nothing there 
         10 + " objects" // => "10 objects"
         //or a number:
         "7" * "4"; // => 28
+
+    //Some other important conversion you should know:
+    undefined //NaN, false, typeError for object
+    null //0 false typeError for object
+    true //1 new Boolean(true)
+    "" //0 false new String("")
+    0, -0 //false new Number(-(0)
+    Infinity // true new Number(Infinity)
+
+    /*String that can be parsed as numbers convert to those numbers. Trailing or leading
+    spaces are allowed. However, any trailing or leading spaces that are not part of a
+    numeric literal or converted into NaN*/
+
+    //Primitive to object conversions are straightforward: primitve values convert to their wrapper object.
+
+    //Conversions and Equality
+        //You know that == is pretty flexible when it comes to comparisons:
+                null == undefined //true
+                "0" == 0 //string converts than is consider true
+                0 == false // true
+                "0" == false // true
+        //=== does not perform conversion when comparing
+
+    //Explicit Conversions 
+        //Explicit conversions may sometimes be required by the programmer.
+        //The easiest way to do this is by use of the wrapper objects:
+            Number("3")
+            String(false) //"false"
+            Boolean([]) //true
+            Object(3) //new Number(3)
+            //Note that any value (other than undefined and null) have a toString() method
+            //The result of this method is usually the same as new String()
+
+        //Watch out for certain implicit types of conversion:
+            x + "" //Same as String(x)
+            +x //Same as Number(x)
+            !!x //Sames as Boolean(x)
+
+        //parseFloat() and parseInt() skip leading whitespace, and ignore anything that follows:
+                parseInt("3 blind mice"); //3
+                parseFloat(" 3.14 meters"); //3.14
+
+        //If a string begins with Ox or OX, parseInt interprets it as a hexadecimal number:
+                parseInt("Oxff"); //255
+
+        //Other things to know:
+                parseInt("0.1"); //NaN: integers can't start with "."
+                parseFloat("$72.34"); //NaN: numbers can't start with "$"
+
+        //parseInt accepts an optional second argument specifying the radix (base) of the number to parse:
+                parseInt("11", 2) // 3 (1*2 + 1)
