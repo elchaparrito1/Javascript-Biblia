@@ -322,3 +322,32 @@ destroyed. So when you go to look up the property later, there is nothing there 
 
         //parseInt accepts an optional second argument specifying the radix (base) of the number to parse:
                 parseInt("11", 2) // 3 (1*2 + 1)
+
+//3.8.3 Object to Primitive Conversions
+    //Object-to-boolean conversions are trivial: all objects (arrays & functions) convert to true;
+        //This is even the case for wrapper objects:
+        new Boolean(false) //This is an obj rather than a primitive so it converts to true
+    
+    /*Object-to-string or object-to-number conversions are performed by invoking a method
+    of the object to be converted. This is complicated by the fact that JS objects have two
+    different methods that perform conversions:*/
+        //The first is called toString().
+            //It returns a string representation of the object, but it has some interesting effects:
+            let obj = {a:2,b:3}
+            let strObj = obj.toString() //this returns [object Object]
+
+            //The toString() method for other classes also exists:
+                //Array Class:
+                    [1,2,3].toString() //"1,2,3" => converts each element to a string
+                //Function Class:
+                    (function(x) {f(x);}).toString() //"(function(x) {f(x);})" returns an implementation defined version
+                //RegExp Class:
+                    /\d+/g.toString() //converts to a string that looks like a RegExp literal 
+        
+        //The second is called valueOf().
+            //This method is less well defined. Its supposed to convert the obj to a primitive value that represents the obj.
+            //Objects though are compound values, and most objects cannot really be represented by a single primitive value.
+            //So valueOf() usually just returns the object itself rather than a primitive
+
+        //To convert an object to a string, JS takes these steps:
+            
