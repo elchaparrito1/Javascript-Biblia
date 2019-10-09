@@ -11,7 +11,7 @@ b = 4;
 a = 3; b = 4;
 
 //Note though that JS treats breaks as semicolons only if it can't parse the code without semicolons.
-//It treats a line break as a semicolon if the next nonspace character cannot be interpreted as a continuation of the current statement:
+//It treats a line break as a semicolon if the next non-space character cannot be interpreted as a continuation of the current statement:
 var a 
 a = 
 3

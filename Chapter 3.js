@@ -322,6 +322,13 @@ destroyed. So when you go to look up the property later, there is nothing there 
 
         //parseInt accepts an optional second argument specifying the radix (base) of the number to parse:
                 parseInt("11", 2) // 3 (1*2 + 1)
+            
+            /*The radix parameter is used to specify which numeral system to be used, for example, a radix of 16 (hexadecimal) indicates that the number in the string should be parsed from a hexadecimal number to a decimal number.
+
+                If the radix parameter is omitted, JavaScript assumes the following:
+                    If the string begins with "0x", the radix is 16 (hexadecimal)
+                    If the string begins with "0", the radix is 8 (octal). This feature is deprecated
+                    If the string begins with any other value, the radix is 10 (decimal)*/
 
 //3.8.3 Object to Primitive Conversions
     //Object-to-boolean conversions are trivial: all objects (arrays & functions) convert to true;
@@ -350,4 +357,66 @@ destroyed. So when you go to look up the property later, there is nothing there 
             //So valueOf() usually just returns the object itself rather than a primitive
 
         //To convert an object to a string, JS takes these steps:
-            
+    
+    //If obj has toString() method, JS calls it. If it returns a primitive value, JS converts that to a string.
+    //If there is no toString() or a primitive isn't returned, then JS looks for valueOf().
+    //Otherwise, JS cannot obtain a primitive value from either toString() or valueOf().
+    //For converting to a number, JS follows the same steps, but tries with valueOf() first.
+
+    /*The "+" operator in JS is used for addition and string concatenation. If either of its operands is an object, js converts 
+    the object using a special object-to-primitive conversion rather than the object-to-number conversion*/
+        typeof(now + 1) // "string": + converts dates to strings
+        typeof(now - 1) //"number": - uses object-to-number conversion
+        let now = new Date();
+    //Variable Declaration
+        //In non-strict mode in JS, if you assign a value to an undeclared variable, JS actually creates that variable as a property of the declared global variable.
+    num = 9 //This would attached itself to the global object.
+    //Variable Scope
+    //You know that a local variable in a function would take precedence over a global variable by the same name
+    let scope = "global"
+
+    checkscope = () => {
+      let scope = "local";
+      return scope
+    }
+
+    console.log(checkscope()) //returns "local"
+    //Although you can get away with not using "let, var, const" when in the global scope, you must always use this with local variables.
+
+    scope = "global"
+
+    checkScope = () => {
+      scope = "local";
+      myscope = "local"
+      return [scope, myscope]; //changes the global scope
+    }
+
+    console.log(checkScope(), scope) //This is the global scope, but would log as "local"
+
+    /*In some C-like languages, each block of code within curly braces ahs its own scope, 
+    and variables are not visible outside of the block in which they are declared. This is
+    called block scope and JS does not have it. Instead, JS uses function scope - variables
+    are visible within the funtion in which they are defined and within any functions that 
+    are nested within that function.*/
+
+    /*Function scope means that all variables declared within a function are visible throughout
+    the body of the function. Buriously, this means that variables are even visible before they
+    are declared, which of course is known as hoisting*/
+
+    function f() {
+      console.log(scope); //This would be undefined. Remember though that scope gets hoisted, and assigned undefined for now.
+      let scope = "local"; //Then here the value is actually changed to "local"
+      console.log(scope); //logs "local"
+    }
+
+    /*JS is a lexically scoped language: The scope of a variable can be thought of as the set of source code lines
+    for which the variable is defined. Global variables are defined throughout the program. Local variables are 
+    defined throughout the function in which they are declared.*/
+
+    /*If we think of local variables as properties of some kind of implementation-defined-boject, then there is 
+    another way to think about variable scope. Every chunk of JS code has a scope chain associated with it.*/
+
+    /*The scope chain is a list or chain of objects that defines the variables that are "in scope" for that code. 
+    When JS needs to look up the value of a variable x (a process called variable resolution) it starts by looking
+    at the first object in teh chain. If it cannot locate a property called x there, it goes up a level in the chain.
+    This continues until x is found or a ReferenceError is logged.*/
