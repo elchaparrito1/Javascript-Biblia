@@ -420,3 +420,101 @@ destroyed. So when you go to look up the property later, there is nothing there 
     When JS needs to look up the value of a variable x (a process called variable resolution) it starts by looking
     at the first object in teh chain. If it cannot locate a property called x there, it goes up a level in the chain.
     This continues until x is found or a ReferenceError is logged.*/
+
+    //An expression is a phrase of JavaScrip that a JavaScript interpreter can evaluate to produce a value
+
+//A variable name is a simple expression that evaluates to whatever value has been assigned to that variable.
+
+    //The most common way to build a complex expression out of simpler expressions is with an operator.
+    x * y
+
+    //The simplest expressions, known as primary expressions, are those that stand alone.
+    1.23
+    "hello"
+    /pattern/
+
+    //Some of JS's reserved words are primary expressions:
+    true
+    false
+    null
+    this
+
+    //finally, the third type of primary expression is the bare variable reference:
+    i //Evaluates to the value of the variable i
+    sum //Evaluates to the variable sum
+    undefined //undefined is a global variable, not a keywordlik null
+
+    //Object and array initializers are expressions whose value is a newly created object or array.
+    //These initializer expressions are sometimes called object literals and array literals.
+    /*Unlike true literals, however, they are not primary expressions, because they include 
+    a number of subexpressions that specify property and element values*/
+
+    //Array initializer:
+    [1+2,3+4] //2-element array. First element is 3. Second is 7.
+
+    /*The element expressions in an array initializer can themselves be array initializers, whcih means that these
+    expressions can created nested arrays:*/
+    let matrix = [[1,2,3], [4,5,6], [7,8,9]]
+
+    /*The initializer for an array is a comma-separated list of constant expressions enclosed in braces ( { } ). 
+    The initializer is preceded by an equal sign ( = ). You do not need to initialize all elements in an array.*/
+
+    //A function definition expression:
+    let square = function(x) { return x * x}
+
+//Property Access Expressions:
+    //Really is referring to the dot or bracket notation:
+    expression.identifier
+    expression[identifier]
+    
+    /*If the value is null or undefined, the expression shows a TypeError, since these
+    are two JS values that cannot have properties.*/
+
+    /*dot notation is the sipmler of the simpler of the two property access options.
+    But notice that it can only be used when the property you want to access has a name,
+    and when you know the name of that identifier.*/
+
+    /*If the property is a reserved word or includes spaces or punctuation characters,
+    or when it is a number, you must use the square bracket notation.*/
+
+//Invocation Expressions:
+    //An invocation expression is JS's syntax for calling a function or method.
+    //It starts with a function expression that identifies the function to be called.
+    f(o);
+    Math.max(x,y,z);
+    a.sort();
+
+    /*When an invocation expression is evaluated, the function expression is evaluated
+    first, and then the argument expressions are evaluated to produce a list of argument
+    values. Next the argument values are assigned, in order, to the parameter names spe-
+    cified when the function was defined, and then the body of the function executed.*/
+
+    //Every function invocation includes a pair of parenthesis and an expression.
+
+    /*If that expression is a property access expression, then the invocation is known as
+    a method invocation.*/
+
+    /*In the method invocations, the object or array that is the subject of the property access
+    becomes the value of the "this" parameter while the body of the function is executed*/
+
+    /*This enables an object-oriented programming paradigm in which functions operate on 
+    the object of which they're a part*/
+
+//Object Creation Expressions
+    //An object creation expression creates a new object.
+    //It invokes a function (called a constructor) to initialize the properties of that object.
+    new Object()
+    new Point(2,3)
+    //If no arguments are passed to the constructor function, then the parenthesis can be omitted.
+    new Object
+
+    //When an object creation expression is evaluated, JS first:
+        //creates a new empty object, just like the one created by the object initializer{}. 
+        //Next, it invokes the specified function with the specified arguments,
+            //passing the new obj as the value of the "this" keyword
+            //The function can then use "this" to initialize the properties of the newly created object
+    
+    //Functions written for use as constructors do not return a value
+    //And the value of the object creation expression is the newly created an initialized object
+
+    
