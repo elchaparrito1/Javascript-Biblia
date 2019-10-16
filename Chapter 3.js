@@ -17,7 +17,8 @@
 //3.1 Numbers:
 //You know that you can define your own classes of objects by defining appropriate constructor functions.
 
-//Unlike many languages, JS does not make a distinction between integers and floating-point values. 
+/*Unlike many languages, JS does not make a distinction between integers and floating-point values. Rather, all numbers
+are recognized as floating-point values.*/ 
 
 //When a number appears in JS, it is called a numeric literal.
 
@@ -45,6 +46,8 @@
 
     //NaN is also strange b/c it does not compare equal to any other value, even itself:
         console.log(NaN === NaN); //returns false
+        console.log(typeof NaN); //Also strange. This would give you a number
+        //But this is a result of a bad mathematical calculation so its the numeric result of an error
     
     //-0 is also strange for the following:
         console.log(0 === -0); //return true
@@ -89,14 +92,16 @@
 
         //The conversion down to binary is quite complex, but at the heart, the conversion is done using the base 2s. 
             //Given a random number, first rule is you can't start with a base 2 higher than the given number. 
-            //Then, you would etch out each power of 2 and minus from the given number. If the given base 2 can minus from it, then it would be a 1 in binary. 
+            /*Then, you would etch out each power of 2 and minus from the given number. If the given base 2 can minus 
+            from it, then it would be a 1 in binary.*/ 
             //If it cannot, then it would be 0. You follow this process until reaching zero for the given number.
     
         /*Letters would be similar process. For instance, F is the 6th number of the alphabet, so our given 
         number would be 6. There are 8 bytes again or 8 digits, and for letters, lowercase always starts with 
         0110, so your binary for the letter F would be: 01100110.*/
 
-    //Remember that 8 bits make up a byte. And a byte can string together 256 different combinations (Remember powers of 2? 2 to the power of 8 is 256.).
+    /*Remember that 8 bits make up a byte. And a byte can string together 256 different combinations (Remember powers 
+    of 2? 2 to the power of 8 is 256.).*/
     
     /*A 16-bit machine would break up and process 16 bits at a time. The number of bits that are processed at a time are known as a computer word, so 
     we can think of bits as the “letters” that make up a computer word.*/
@@ -115,7 +120,9 @@
             //100 in binary is 4. (2² = 4, 4–4 =0, our binary represents the places filled by 2² 2¹ 2⁰).
             /*In JavaScript numbers, generally, any digits that exceed the 52 bits provided by the fraction 
             (or significand) are assumed to be 0 and discarded.*/
-            /*Numbers entered into JavaScript are decimal floating-point numbers and are then internally represented as binary floating-point numbers. That conversion for decimal floating-point numbers whose prime factors include anything other than 2 will lead to imperfect results. 
+            /*Numbers entered into JavaScript are decimal floating-point numbers and are then internally represented 
+            as binary floating-point numbers. That conversion for decimal floating-point numbers whose prime factors 
+            include anything other than 2 will lead to imperfect results. 
                 For example —
                     0.125 in decimal = 125/1000 = 1/8 = 0.001 in binary
                     0.1 in decimal = 1/10 = 1/2*5
@@ -124,7 +131,7 @@
     
     //Null vs Undefined
         //null is a language keyword that evaluates to a special value that is usually used to indicate the absence of value
-            //using typeof operator on ull returns the string "object", indicating that null can be thought of as a speical object.
+            //using typeof operator on null returns the string "object", indicating that null can be thought of as a special object.
             //In practice, however, this is just regarded as its own type and can be used to indicate no value for numbers, strings, and objects.
 
         //undefined represents a deeper kind of absence.
@@ -136,9 +143,18 @@
         //Consider undefined to be a system-level, unexpected, or error-like absence of a value
         //Consider null to be a program-level, normal or expected absence of a value
 
+        //A little aside:
+        //While null is a primitive value there is something strange with it:
+        console.log(typeof null); //This would return an object, but why?
+
+        /*In the first implementation of JavaScript, JavaScript values were represented as a type 
+        tag and a value, with the type tag for objects being 0, and null was represented as 
+        the NULL pointer (0x00 on most platforms). As a result, null had 0 as a type tag, hence 
+        the bogus typeof return value (reference).
+
 //3.5 The Global Object is a regular object that serves a very important purpose:
     //the properties of this object are the globally defined symbols that are available to a JS program.
-    /*When the JS intepreter starts, or whenever a web broser loads a new page, it creates a new 
+    /*When the JS intepreter starts, or whenever a web browser loads a new page, it creates a new 
     global object and gives it an intial set of properties that define:*/
       //global properties like undefined, Infinity, and NaN
       //global functions like isNaN(), parseInt(), and eval()
@@ -151,7 +167,7 @@
     console.log(global);
 
   /*The Window object serves as the global object for all JS code contained in the browser window it represents.
-  This global Window has a self-referential "window" property that can be used instead of "this" to refere to the 
+  This global Window has a self-referential "window" property that can be used instead of "this" to refer to the 
   global object.*/
   console.log(window === this);
   //The Window object defines the core global properties.
@@ -175,7 +191,7 @@ making it global to the browsers that usually use window as the global scope.*/
 /*JS objects are composite values: they are a collection of properties or named values. When the value is a function
 we refer to this as a method.*/
 
-//We've also seent aht strings have properties and methods:
+//We've also seen that strings have properties and methods:
   let s = "hello world";
   let word = s.substring(s.indexOf(" ")+1, s.length); //Using string properties
     //substring() - The substring() method extracts the characters from a string, between two specified indices, and returns the new sub string.
@@ -256,7 +272,7 @@ destroyed. So when you go to look up the property later, there is nothing there 
             //Assigning the object or array to a variable assigns the REFERENCE.
             //It does not create a new copy of the array.
 
-            //If we want to compare two objects or arrays, we must compare their properities or elements as follows:
+            //If we want to compare two arrays, we must compare their properities or elements as follows:
                 function equalArrays(a,b) {
                     if (a.length != b.length) return false;
                     for (let i = 0; i < a.length; i++) {
@@ -323,7 +339,9 @@ destroyed. So when you go to look up the property later, there is nothing there 
         //parseInt accepts an optional second argument specifying the radix (base) of the number to parse:
                 parseInt("11", 2) // 3 (1*2 + 1)
             
-            /*The radix parameter is used to specify which numeral system to be used, for example, a radix of 16 (hexadecimal) indicates that the number in the string should be parsed from a hexadecimal number to a decimal number.
+            /*The radix parameter is used to specify which numeral system to be used, for example, a radix of 16 
+            (hexadecimal) indicates that the number in the string should be parsed from a hexadecimal number to 
+            a decimal number.
 
                 If the radix parameter is omitted, JavaScript assumes the following:
                     If the string begins with "0x", the radix is 16 (hexadecimal)
@@ -369,7 +387,8 @@ destroyed. So when you go to look up the property later, there is nothing there 
         typeof(now - 1) //"number": - uses object-to-number conversion
         let now = new Date();
     //Variable Declaration
-        //In non-strict mode in JS, if you assign a value to an undeclared variable, JS actually creates that variable as a property of the declared global variable.
+        /*In non-strict mode in JS, if you assign a value to an undeclared variable, JS actually creates that variable 
+        as a property of the declared global variable.*/
     num = 9 //This would attached itself to the global object.
     //Variable Scope
     //You know that a local variable in a function would take precedence over a global variable by the same name
@@ -517,4 +536,26 @@ destroyed. So when you go to look up the property later, there is nothing there 
     //Functions written for use as constructors do not return a value
     //And the value of the object creation expression is the newly created an initialized object
 
-    
+//4.7.3
+    //Lvalues are an expression that can legally appear on the left side of an assignment expression.
+    //In JS, variables, properties of objects, and elements of arrays are lvalues.
+
+//4.7.4
+    //Operator side effects can occur with certain operators.
+    //The delete operator for example has side effects: deleting a property is like assigning undefined to it.
+
+//4.8.1
+    //The binary + operator add numeric operands or concatenates string operands
+    //When both operands are numbers, or both are strings, it is obvious what the + does.
+    //But what if they're different?
+
+    //+ gives priority to string concatenation. 
+        //if either of the operands is a string or an object that coverts to a string, the other is converted to match.
+        //So it behaves like this:
+            1 + 2 //3
+            "1" + "2" // "12"
+            "1" + 2 //"12"
+            1 + {} //"1[object Object]"
+            true + true //2: addition after boolean-to-number
+
+            
