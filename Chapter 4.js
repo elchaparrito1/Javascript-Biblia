@@ -249,9 +249,15 @@
         "one" < 3 //false; "one" changes to NaN, thus resulting in a false statement
 
 //4.9.3 The in Operator
-  /*The in operator exprects a left-sided operand that is or can be converted to a string. It expects a right-side
-  operand that is an object. It evaluates to true if the left-side value is the name of a property of the right-side
-  object*/
-    let obj = {a:1, b:2};
-        console.log("c" in obj); //false; b/c "c" is not a property in obj
-        console.log("a" in obj); //true;
+    /*The in operator exprects a left-sided operand that is or can be converted to a string. It expects a right-side
+    operand that is an object. It evaluates to true if the left-side value is the name of a property of the right-side
+    object*/
+      let obj = {a:1, b:2};
+          console.log("c" in obj); //false; b/c "c" is not a property in obj
+          console.log("a" in obj); //true;
+    //Again, works for objects, so it works for arrays:
+        let data = [7,8,9];
+        "0" in data //true: array has an element or index of 0 (0:7);
+        "2" in data //true
+        "3" in data //false
+    
