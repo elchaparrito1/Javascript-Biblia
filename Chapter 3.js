@@ -128,6 +128,15 @@ are recognized as floating-point values.*/
                     0.1 in decimal = 1/10 = 1/2*5
                     0.2 in decimal = 1/20 = 1/2*2*5
             */
+
+    //A way to get around the floating-point number issue is to use the method .toFixed().
+
+        let x = 0.1;
+        let y = 0.2;
+        let z = 0.3;
+
+        console.log(z - y === x); //false
+        console.log((z - y).toFixed(2) === x.toFixed(2)); //true
     
     //Null vs Undefined
         //null is a language keyword that evaluates to a special value that is usually used to indicate the absence of value
@@ -319,6 +328,10 @@ destroyed. So when you go to look up the property later, there is nothing there 
             Object(3) //new Number(3)
             //Note that any value (other than undefined and null) have a toString() method
             //The result of this method is usually the same as new String()
+
+            console.log(0 == null); //false; rule in JS. Null cannot be compared
+            console.log(null == undefined); //true; one exception though. Null can be compared to undefined
+            console.log(0 == undefined); //false; undefined compared to anything other than null is false
 
         //Watch out for certain implicit types of conversion:
             x + "" //Same as String(x)

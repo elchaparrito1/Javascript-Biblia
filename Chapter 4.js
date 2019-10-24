@@ -142,6 +142,28 @@
         let f = false;
 
         console.log(e + f); //1
+    
+    //Other operations also have their little tricks:
+        let a = "split";
+        let b = "us";
+
+        console.log(a - b); //NaN. Subtraction does behave like + and just concantenate them
+
+        let c = 12;
+        let d = "1";
+
+        console.log(c - d); //11. If it can though, JS will coerce a string into a value for subtraction
+
+        let e = 2;
+        let f = "2.2";
+
+        console.log(e * f); //4.4. JS cannot bild strings out of * operations.
+                            //The string, therefore, is coerced into a value.
+
+        let g = 2;
+        let h = "Num";
+
+        console.log(g * h); //NaN. "Num" cannot be changed to a value.
 
 //4.8.2 Unary Arthmetic Operators
   //These modify the value of a single operand to produce a new value.
@@ -261,3 +283,87 @@
         "2" in data //true
         "3" in data //false
     
+//4.9.4 The instanceof Operator
+  /*the instanceof operator expects a left-side operand that is an 
+  object and a right-side operand that idenifies a class of objects*/
+  
+  //The operator evaluates to true if the left-side object is an instance of the right side.
+  
+  /*Chapter 9 explains that classes of objects are defined by the constructor
+  function that initializes them. Thus, the right-side operand of instance of 
+  should be a function*/
+    let d = new Date();
+    d instanceof Date; //true; d was created with Date();
+    d instanceof Object; //true; all objects are instances of objects;
+    d instanceof Number; //false;
+    console.log(d instanceof Number)
+
+  //Note that all objects are instances of Object.
+  //instanceof considers the "superclasses" when deciding whether an object is an instance of a class
+
+  //Remember that this goes back to the prototype chain.
+    //instanceof will start at the lowest part and go up the prototype chain until it is either found or return false.
+
+//4.10 Logical Expressions
+  //AND (&&) operator performs boolean algebra
+    //This can be understood at three different levels:
+      /*1 - when used with boolean operands, && performs the Boolean AND operation on
+            the two values: it returns true if and only if both operands are true*/
+      
+          //It is often used as a conjuntion to join two relational expressions:
+          x == o && y == o; //true only if both do equal o.
+        
+          /*Relational expressions always evaluate to true or false, but they 
+          do not require that its operands be boolean values*/
+
+          //recall that all JS values are either truthy or falsy
+            //falsy values: 0, -0, NaN, null, undefined, and " "
+            //truthy values: all other primitives and objects
+
+      /*2 - the second level to understand is as a Boolean AND operator for
+            truthy and falsy values. If both operands are truthy, the operator
+            returns a truthy value. Otherwise, one or both operands must be falsy
+            and the operator returns a falsy value.*/
+
+      /*3 - note that the above says that the operator returns a truthy or falsy
+            value. It does not, however, specify what that value is. This operator
+            starts by evaluating its first operand, the expression on its left.
+            If the value on the left is falsy, then the entire expression must be
+            falsy, so && simply returns the value on the left, and does not even
+            evaluate the expression on the right. BUT, if the value on the left
+            is truthy, then the overall value of the expression depends on the 
+            value on the right-hand side. If the value on the right is truthy
+            , then the overall value must be truthy, and if the value on the 
+            right is falsy, then the overall value must be falsy. So when 
+            the value on the left is truthy, the operator evaluates and returns 
+            the value on the right:.*/
+
+            let o = {x : 1};
+            let p = null;
+            o && o.x; //1: o is truthy, so return value of o.x;
+            p && p.x  //null; p is falsy, so return it and don't evaluate p.x
+
+            let a = "";
+            let b = false;
+            let c = true;
+            console.log(a && "Hello"); //"" returns "a" value b/c the left-side operand is falsy
+            console.log(b && "Hello"); //false returns "b" value b/c the left-side operand is falsy
+            console.log(c && "Hello"); //"Hello" returns right-side value b/c left side is true
+            console.log(c && false); //false returns right-side value b/c left side is true
+
+            //You use this a lot in React, but it is used for when to put a statement there based on state.
+        
+        //So it is important to understand that the && operator may or may not evaluate its right-side operand
+        //This behavior is called short circuiting, and you use it a lot in React where you exploit this behavior
+        if (a == b) {stop()};
+        //is the same as
+        (a == b) && stop();
+
+//4.10.2 Logical OR(||)
+  //This operator behaves a lot like &&
+  /*It works as follows: it starts by evaluating its first operand, the expression on its left. If the value
+  of this first operand is truthy, it returns that value. Otherwise, it evaluates its second operand and 
+  returns that value.*/
+
+    //You've seen a lot of practical examples for this. It is often used to provide default values:
+    let username = req.body.username || "Bob"
