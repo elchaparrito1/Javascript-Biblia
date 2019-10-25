@@ -367,3 +367,18 @@
 
     //You've seen a lot of practical examples for this. It is often used to provide default values:
     let username = req.body.username || "Bob"
+
+//4.10.3 Logical NOT (!)
+  //Unlike && and ||, hte ! operator converts its operand to a boolean value before inverting the value.
+  //This means that ! always returns true or false
+
+//4.11 Assignment Expressions
+  i = 0
+  //The = operator expects its left-side operand to be an lvalue: a variable or object property or array element
+  //It expects its right-side operand to be an arbitrary value of any type.
+  /*Although this assignment expression is quite simple, you may sometimes see the value of a = expression used 
+  as part of a larger expression. For instance, you can assign and test in the same expression*/
+  (a = b) === 0 // = has a very low precedence so often parenthesis are required for expressions
+
+  //Then there is assignment with operation
+    total += sales_tax
