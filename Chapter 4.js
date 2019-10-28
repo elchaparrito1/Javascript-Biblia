@@ -382,3 +382,27 @@
 
   //Then there is assignment with operation
     total += sales_tax
+
+//4.13.2 The typeof Operator
+  //This returns a string value of the type of operand.
+  //Remember that null returns as an object.
+  //Also, typeof returns object for all objects and arrays. 
+  /*You need other techniques for differentiating object and array values (instanceof 4.9.4, class attribute 
+  6.8.2, constructor property 6.8.1, 9.2.2)*/
+  //Although functions are an object, typeof considers them sufficiently different to have their own return value:
+    function f() {}
+
+    console.log(typeof f); //"function"
+
+//4.13.3 The delete Operator
+    //unary operator used to delete the object property or array element.
+    //delete is typically used for its property deletion side effect, and not for the value it returns:
+        let o = {x:1, y:2};
+        delete o.x;
+        "x" in o; // false: the property has been deleted
+
+    //delete expects its operand to be an lvalue. It returns true if successfully deleted.
+    //Not everything can be deleted though: built-in core or client- or user-side variables, and functions
+    let o = {x:1, y:2};
+    delete o; //returns false b/c it cannot delete a declared variable
+    

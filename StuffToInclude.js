@@ -50,3 +50,5 @@ console.log(var1); //Variable is a number here: 5
 var1 = "10";
 
 console.log(var1) //Variable becomes a string here: "10"
+
+//Look out for section 8.7.7 on callable objects vs true functions.
