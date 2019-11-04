@@ -52,3 +52,12 @@ var1 = "10";
 console.log(var1) //Variable becomes a string here: "10"
 
 //Look out for section 8.7.7 on callable objects vs true functions.
+
+let arr = [1,2,3];
+
+console.log(arr.slice(2)); //[2, 3]
+console.log(arr); //[1, 2, 3]
+console.log(arr.splice(2)); //[3]
+console.log(arr); //[1, 2]
+
+//Just remember that slice doesn't change the original array while splice does.

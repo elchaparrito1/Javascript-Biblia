@@ -95,3 +95,24 @@
       };
       
       runScope(); 
+
+//5.3.2 function
+      //We saw the function keyword is used to define functions. 
+      //We saw it in function definition expressions (let x = function(a,b){return a+b}).
+      //It can also be used in statement form:
+      x()
+      //Example of function declaration:
+      function hypo(x,y) {
+          return Math.sqrt(x*x + y*y)
+      }
+
+      //A key difference between the two is that expressions aren't lodaded before any code:
+      alert(foo);
+      var foo = function() {return 5} //ERROR! foo wasn't loaded yet.
+      //Whereas declarations are loaded before any code can run:
+      alert(foo);
+      function foo() {return 5} // Alerts 5
+
+      //Function declarations, however, may only appear at the top in nested functions.
+      /*The way to remember the difference is that the function declaration statement includes 
+      for the function, whereas a function expression does not.*/
