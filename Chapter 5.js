@@ -98,7 +98,9 @@
 
 //5.3.2 function
       //We saw the function keyword is used to define functions. 
-      //We saw it in function definition expressions (let x = function(a,b){return a+b}).
+      //We saw it in function definition expressions:
+      let x = function(a,b) {return a+b}
+
       //It can also be used in statement form:
       x()
       //Example of function declaration:
@@ -106,13 +108,48 @@
           return Math.sqrt(x*x + y*y)
       }
 
-      //A key difference between the two is that expressions aren't lodaded before any code:
+      //A key difference between the two is that expressions aren't loaded before any code:
       alert(foo);
       var foo = function() {return 5} //ERROR! foo wasn't loaded yet.
       //Whereas declarations are loaded before any code can run:
       alert(foo);
       function foo() {return 5} // Alerts 5
 
-      //Function declarations, however, may only appear at the top in nested functions.
+      /*Function declarations, however, may only appear at the top in nested functions. Definition
+      statements are implicitly "hoisted" to the top of the containing script or function,
+      so that they are visible throughout the script or function.*/
+
+      /*With function expressions the code remains where you placed it. With declaration
+      statements, however, both the function name and the function are hoisted, which means
+      you can invoke a JS function before you declare it.*/
+
       /*The way to remember the difference is that the function declaration statement includes 
-      for the function, whereas a function expression does not.*/
+      a function name, whereas a function expression is an anonymous function attached to a 
+      variable name.*/
+
+//5.4 Conditionals
+      //These statements execute code or skip it based on a met condition.
+      //These statements are sometimes known as "branches"
+
+      //The basic format of an "if" statement is as follows: if (expression) {statement}
+      //JS requires a single statement after the "if" keyword.
+      //But you can use a statement block to combine multiple statments into one:
+        if (address) {
+            address = "";
+            message = "No address found";
+        }
+      //(This covered switch statements in detail, but you didn't see any big surprises).
+
+//5.5 Loops
+    //while
+        //JS's most basic loop:
+        while (expression) {
+            statement
+        };
+        /*To execute a while statement, the interpreter first evaluates expression.
+        If the value of the expression is falsy, then the interpreter skips over the
+        statement and moves onto the next statement in the program. If truthy then,
+        the loop obviously continues until falsy is yielded.*/
+
+        /*Obviously, you know that you wouldn't want to never meet the condition of falsy,
+        b/c this would lead to an endless loop*/
