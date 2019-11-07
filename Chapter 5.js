@@ -153,3 +153,46 @@
 
         /*Obviously, you know that you wouldn't want to never meet the condition of falsy,
         b/c this would lead to an endless loop*/
+    
+    //do/while
+        //Is like a while loop, but the expression is tested at the bottom of the loop.
+        //This means that it will run or be executed at least once.
+        do 
+          statement
+        while (expression);
+
+    //for
+        //format
+        for(initialize; test; increment) {
+            statement
+        };
+        //initialize, test, and increment are three expressions.
+        //Versus the while loop, which breaks up the three expressions as follows:
+        initialize;
+        while(test) {
+            statement
+            increment;
+        }
+
+    //for/in
+        //This loop used the "for" keyword, but it is completely different from the regular for loop
+        for (variable in object) {
+            statement
+        };
+
+        //variable usually names a variable, but ti may be any expression that evaluates to an lvalue
+        //object is an expression that evaluates to an object.
+        //statement is a statement that serves as the body of the loop.
+
+        //It is easy to iterate through an array using the typical for loop
+        for (let i = 0; i < arr.length; i++) {
+            console.log(arr[i]);
+        };
+
+        //The for/in loop makes it easy to do the same thing for the PROPERTIES of an object
+        for (prop in obj) {
+            console.log(obj[prop]);
+        }; //REMEMBER what a property is: objectName.property (person.age);
+
+        
+
