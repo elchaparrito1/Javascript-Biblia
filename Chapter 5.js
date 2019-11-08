@@ -194,5 +194,36 @@
             console.log(obj[prop]);
         }; //REMEMBER what a property is: objectName.property (person.age);
 
+        //To execute a for/in statement, the JS interpreter first evaluates the object expression.
+        //If this evaluates to null or undefined, the interpreter skips the loop and moves to the next statement.
+        //If it evaluates to a primitive value, that value is converted to its wrapper object.
+
+        /*Note that the variable in the for/in loop may be an arbitrary expression, as long as it
+        evaluates to something suitable for the left side of an assignment. This expression is 
+        evaluated each time through the loop, which means that it may evaluate differently each time:*/
+        let o = {x:1, y:2, z:3};
+        let a = [], i = 0;
+        for (a[i++] in o);
+
+        //Remember though that arrays are a specialized kind of object.
+        //They have their array indexes that can be enumerated with a for/in loop/
+        let arr = [1,2,3];
+        for (iterator in arr) {
+            console.log(iterator);
+        };
+
+        //Note that the for/in loop does not actually enumerate all properties of an object.
+        //Built in methods, for example, defined by core JS are not enumerable
+        //For instance, all objects have a toString() method that for/in doesn't enumerate:
+        for (method in window) {
+            console.log(method);
+        } //toString() would not appear in this list
+
+        //However, all properties defined by your code are enumerable.
+        //Also, it is typical that inherited properties are enumerated over, but only after the "own" ones.
+    
+    //for/of
+
+
         
 
