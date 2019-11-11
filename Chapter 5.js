@@ -223,6 +223,98 @@
         //Also, it is typical that inherited properties are enumerated over, but only after the "own" ones.
     
     //for/of
+        //creates a loop iterating over iterable objects, including: built-in String, Array, array-like objects.
+        for (variable of iterable) {
+            statement
+        }
+        //Again, for/of loop iterates over the values of an iterable:
+        let animals = ['🐔', '🐷', '🐑', '🐇'];
+        let names = ['Gertrude', 'Henry', 'Melvin', 'Billy Bob'];
+
+        for (let animal of animals) {
+          // Random name for our animal
+          let nameIdx = Math.floor(Math.random() * names.length);
+        
+          console.log(`${names[nameIdx]} the ${animal}`);
+        }
+
+        // Henry the 🐔
+        // Melvin the 🐷
+        // Henry the 🐑
+        // Billy Bob the 🐇
+
+        //Again, strings are also an iterable type:
+        let str = 'abcde';
+
+        for (let char of str) {
+          console.log(char.toUpperCase().repeat(3));
+        }
+
+        // AAA
+        // BBB
+        // ...
+
+//5.6 Jumps
+    //Another category of statements are jump statements. 
+    //As the name implies, these cause the JS interpreter to jump to a new location in the source code.
+        //Break - this statement makes the interpreter jump to the end of a loop
+
+        /*Continue - this statement makes the interpreter skip the rest of the body of a loop, and 
+        jump back to the top to start it again.*/
+            //this statement can only be used in a loop. Using it anywhere else causes a syntax error.
+
+        /*Return - this statement makes the interpreter jump from a function invocation back to the 
+        code that invoked it, and also supplies the value of the invocation.*/
+            //Its syntax:
+                return expression
+            //return statement may appear only within the body of a function.
+            //With no return statement, a function invocation simply executes each of the statements in the function body.
+            //B/c of JS's automatic semicolon insertion, you cannot include a line break between the return and the expression.   
+                
+        //Throw - this statement throws an exception and is designed to work with try/catch/finally statement.
+            //This is a signal to say that an error has occurred.
+
+//5.6.1 Labeled Statements
+    //Any statement may be labeled by using an identifier and colon:
+        identifier: statement;
+
+    //By giving it a name, you are able to refer to it later in your program:
+        mainloop: while(token != null) {
+            continue mainloop;
+        }
+    /*The namespace for labeled statements vs variables or functions is different so you 
+    can use the same name for both a labeled statement and or a variable.*/
+
+//5.7.3 "use strict"
+    //You have a general understanding of what this does.
+    //The three key differences though between strict mode and non-strict mode are the following:
+        //The "with" statement is not allowed in strict mode
+
+        /*In strict mode, all variables must be declared: a ReferenceError is thrown if you assign 
+        a value to an identifier that is not a declared variable, function, function parameter, catch
+        clause parameter, or property of the global object.*/
+
+        /*In strict mode, functions invoked as functions (rather than as methods) have a this value of
+        undefined (in non-strict mode, functions of this kind are passed the global object as their this
+        value).*/
+
+        /*In strict mode, assignments to nonwritable properties and attempts to create new properties
+        on nonextensible objects throw a TypeError.*/
+
+        /*In strict mode, the arguments object in a function holds a static copy of the value passed to 
+        the function. In non-strict mode, the arguments object has "magical" behavior in which elements 
+        of the array and named function parameters both refer to the same value*/
+
+        //In strict mode an attempt to delete a nonconfigurable property throws a TypeError.
+
+        //In strict mode, it is a syntax error for an obj literal to define two or more properties by the same name.
+
+        //In strict mode, it is a syntax error for a function declaration to have two or more parameters by the same name.
+
+        //Summary of JS statements on pg 112
+
+
+
 
 
         
