@@ -47,3 +47,61 @@
         /*if it returns a positive value, the value in b will be ordered before a.
         When you pass the function (a, b) => a - b, you’re telling the .sort() function 
         to sort the numbers in ascending order.*/
+
+//Datacourse - String Reversal
+    //You of course know about the easy way to do this:
+    str.split('').reverse().join('');
+
+    //In case, however, they ask you to do this a different way:
+    function strReversal(str) {
+        let arr = str.split('');
+        let result = [];
+        for (char of arr) {
+            result = char + result
+        }
+
+        return result;
+    }
+
+//Datacourse - integer Reversal
+    //You figured out a complicated way to do this. A much easier way is as follows:
+    reverseInt = (int) => {
+        let strNum = int.toString();
+        let result = parseInt(strNum.split('').reverse().join(''));
+  
+        return (int > 0 ? result : result * -1)
+    }
+
+//Datacourse - MaxChars
+    //This is a big one. You were tasked with looking at a string to see which char appears the most
+    //The secret to doing this:
+
+    maxChars = (str) => {
+        let chars = {};
+        let maxChar;
+        let maxVal = null;
+        
+        for (char of str) { //Remember that for of works directly on String object
+            maxChars[char] = maxChars[char] + 1 || 1
+        } //This loops through the str and creates a key/value pair for each char in the string
+  
+        for (prop in chars) {
+          if (chars[prop] > maxVal) {
+            maxVal = chars[prop];
+            maxChar = prop
+          } 
+        } //Then we loop through the object to see which one is the highest and return maxChar
+  
+        return maxChar;
+    }
+
+//Datacourse - Data Chunking
+    //Given an array and chunk size, divide the array into as many subarrays
+    function chunk(array, size) {
+        let newChunkedArr =  [];
+
+        for (let element of array) {
+            const last = newChunkedArr[newChunkedArr.length - 1];
+        }
+    }
+
