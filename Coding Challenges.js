@@ -98,10 +98,131 @@
 //Datacourse - Data Chunking
     //Given an array and chunk size, divide the array into as many subarrays
     function chunk(array, size) {
-        let newChunkedArr =  [];
+        const chunked = [];
+        let index = 0;
+      
+        while (index < array.length) {
+          chunked.push(array.slice(index, index + size));
+          index += size;
+        }
+      
+        return chunked;
+      }
 
-        for (let element of array) {
-            const last = newChunkedArr[newChunkedArr.length - 1];
+//Datacourse - Anagrams
+      //Two way of tackling this:
+      function anagrams(stringA, stringB) {
+        return cleanString(stringA) === cleanString(stringB);
+      }
+      
+      function cleanString(str) {
+        return str
+          .replace(/[^\w]/g, '')
+          .toLowerCase()
+          .split('')
+          .sort()
+          .join('');
+      }
+
+      //Or the more complex way:
+      function anagrams(stringA, stringB) {
+        const aCharMap = buildCharMap(stringA);
+        const bCharMap = buildCharMap(stringB);
+
+        if (Object.keys(aCharMap).length !== Object.keys(bCharMap).length) {
+          return false;
+        }
+    
+        for (let char in aCharMap) {
+          if (aCharMap[char] !== bCharMap[char]) {
+            return false;
+          }
+        }
+    
+        return true;
+      }       
+
+      function buildCharMap(str) {
+        const charMap = {};
+      
+        for (let char of str.replace(/[^\w]/g, '').toLowerCase()) {
+          charMap[char] = charMap[char] + 1 || 1;
+        }
+      
+        return charMap;
+      }
+
+//Printing Steps:
+      /*Write a function that accepts a positive number N. The function should 
+      console log a pyramid shape with N levels using the # character. Make sure 
+      the pyramid has spaces on both the left *and* right hand sides*/
+    // --- Examples
+    //   pyramid(1)
+    //       '#'
+    //   pyramid(2)
+    //       ' # '
+    //       '###'
+    //   pyramid(3)
+    //       '  #  '
+    //       ' ### '
+    //       '#####'
+
+    //First solution is one that you kind of thought to do with a nested for loop
+    function steps(n) {
+        for (let row = 0; row < n; row++) {
+            let stair = ''
+
+            for (let column = 0; column < n; column++) {
+                if (column <= row) {
+                    stair += '#';
+                } else {
+                    stair += ' ';
+                }
+
+                console.log(stair);
+            } //Note it is a nested loop.
+              //The key is the if/else. If column is ever <= row we get '#'
+              //So in the first iteration, it would go as follows:
+                //column = 0; row = 0; they are = so we get '#'
+                //next iteration:
+                //column = 1; row = 0; column is > so we get '# _ '
+                //column = 2; row = 0; '# _ _ '
+                //column = 3; row = 0; '# _ _ _'
         }
     }
+
+    //Second solution is one that involves recursion:
+    function steps(n, row = 0, stair = '') {
+
+        if (n === row) return;
+        if (n === stair.length) {
+            console.log(stair);
+            return steps(n, row + 1);
+        };
+
+        if (stair.length <= row) {
+            stair += '#';
+        } else {
+            stair += ' ';
+        }
+
+        steps(n, row, stair); 
+    } //makes sense, but you just need to look at this closely.
+
+//Pyramid Steps:
+function pyramid(n) {
+    const midpoint = Math.floor((2 * n - 1) / 2);
+        for (let row = 0; row < n; row++) {
+            let level = ''
+
+            for (let column = 0; column < n * 2 - 1; column++) {
+               if (midpoint - row <= column && midpoint + row >= column) {
+                 level += '#';
+               } else {
+                 level += ' ';
+               }
+            } 
+          console.log(level)
+        }
+}
 
