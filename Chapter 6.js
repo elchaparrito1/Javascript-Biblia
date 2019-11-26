@@ -191,3 +191,220 @@ ance a key feature of the language.*/
         and o's extensible attribute is false. If p does not already exist on o, and if there is 
         no setter method to call, then p must be added to o. But if o is not extensible, then no
         new properties can be defined on it.*/
+
+//6.3 Deleting Properties
+    //Delete does not operate on the value of the property but the property itself
+    //The delete operator only deletes own properties, not inherited ones.
+    //To delete an inherited property, you must delete it from the prototype object in which it is defined.
+
+    //A delete expression evaluates to true if the delete succeeded or if the delete had no effect (like deleting a nonexistent property).
+    o = {x:1} //o has own property x and inherits property toString
+    delete o.x; //Delete x, and return true
+    delete o.x; //Does nothing, and returns true
+    delete o.toString; //Does nothing; toString isn't an own property , but returns true
+    delete 1; //Nonsense, but evaluates to true
+
+    //Delete does not remove properties that have a configurable (property can be deleted) attribute of false
+    //Certain properties of built-in objects are nonconfigurable
+    //As are properties of the global object created by variable and function declaration
+    //Delete simply evaluates to false when a nonconfigurable property is deleted:
+    delete Object.prototype; //Can't delete; property is non-configurable
+    let x = 1;
+    delete this.x; //Can't delete this property
+    function f() {}
+    delete this.f; //Can't delete this property either
+
+    /*When deleting configurable properties of the global object, you can omit the reference 
+    to the global object and simply follow the delete operator with the property name:*/
+    this.x = 1; //Create a configurable global property (no let);
+    delete x; //And delete it
+
+//6.4 Testing Properties
+    //JS objects can be thought of as sets of properties
+        /*And it is often useful to be able to test for membership in the set - to check whether an
+        object has a property with a given name, you can do this with the following:*/
+            //in operator
+                //expects a property name (as a string) on its left side, and an object on the right.
+                //It returns a boolean:
+                let o = { x:1 };
+                "x" in o; //true
+                "toString" in o //true; o inherits a toString property
+            //hasOwnProperty()
+                //checks if has the property name as its own. returns a boolean:
+                let o = { x:1 };
+                o.hasOwnProperty("x"); //true 
+            //propertyIsEnumerable()
+                //this refines the hasOwnProperty() test.
+                //returns true only if the named property is owned and is enumerable
+                //remember that certain built-in properties are not enumerable
+                Object.prototype.propertyIsEnumerable("toString"); //false: not enumerable
+
+            //Instead of using the in property, it is often sufficient to query the property and use !==
+            let o = { x:1 }
+            o.x !== undefined //true: o has a property x
+
+            /*One thing the "in" operator can do that the above can't is distinguish when a property does 
+            exist, but is just set to undefined:*/
+                let o = { x:undefined }
+                o.x !== undefined //false; property exists, but is undefined
+                "x" in o //true; the property exists
+
+//6.5 Enumerating Properties
+    //We sometimes want to iterate through and see the properties of an object
+    //This can be done using the for/in loop, which runs over each enumerable properties of the object
+    //Built-in methods that objects inherit are not enumerable, but the properties that your code adds are
+    let o = {x:1, y:2, z:3};
+    o.propertyIsEnumerable("toString"); //false: not enumerable
+    for (propr in o) {
+        console.log(prop);
+    }; //prints x, y, z, but not toString
+
+    //In addition to the for/in loop, ECMAScript 5 defines two functions that enumerate property names
+        //Object.keys() - which returns an array of the names of the enumerable own properties of an object
+        /*Object.getOwnPropertyNames() - It works like the above but returns the name of all the own proper-
+        ties, and not just the enumerable ones*/
+
+//6.6 Property Getters and Setters
+    //We've said that an object property is a name, a value, and a set of attributes
+    //In ECMAScript 5, the value may be replaced by one or two methods, known as a getter and a setter
+    //These are sometimes known as accessor properties, to distinguish them from data properties.
+    
+    /*When a program queries the value of an accessor property, JS invokes the getter method.
+    The return value of this method becomes the value of the property access expression. When a program
+    sets the value of an accessor property, JS invokes the setter method, passing the value of the 
+    right-hand side of the assignment. This method is responsible for "setting" the property value*/
+
+    /*For the most part, in JavaScript, what you see is what you get. A value’s a value; there are 
+    no tricks. Sometimes however, you want a value that’s based on some other values: someone’s 
+    full name, for example, is a concatenation of their first and last names. If you have a person 
+    object, and you want the users of that object to be able to set the full, first or last name, 
+    and see that change immediately reflected in the other values, you’d conventionally build it 
+    with functions:*/
+
+    person.setLastName('Smith');
+    person.setFirstName('Jimmy');
+    person.getFullName(); // Jimmy Smith
+
+    /*But this is ugly, and requires the users of your object to care that the properties are 
+    related; in a more complex example, that might not be as obvious as with names. Luckily, 
+    there’s a better way, added in ECMAScript 5.*/
+
+    //So getters and setters...
+
+    /*Let’s make that person object. We want to be able to set the first name, last name or full 
+    name, and have it update the other two automagically.*/
+
+    let person = {
+        firstName: 'Jimmy',
+        lastName: 'Smith',
+        get fullName() {
+            return this.firstName + ' ' + this.lastName;
+        },
+        set fullName (name) {
+            var words = name.toString().split(' ');
+            this.firstName = words[0] || '';
+            this.lastName = words[1] || '';
+        }
+    }
+
+    person.fullName = 'Jack Franklin';
+    console.log(person.firstName); // Jack
+    console.log(person.lastName) // Franklin
+
+    //So what’s going on here?
+
+    /*The get and set keywords are important. Following them is the property they relate to 
+    (fullName) and a function body that defines the behaviour when the property is accessed 
+    (name = person.fullName) or modified (person.fullName = 'Some Name').*/
+
+    /*These two keywords define accessor functions: a getter and a setter for the fullName 
+    property. When the property is accessed, the return value from the getter is used. When 
+    a value is set, the setter is called and passed the value that was set. It’s up to you 
+    what you do with that value, but what is returned from the setter is the value that was 
+    passed in – so you don’t need to return anything.*/
+
+    //The official way: 
+    Object.defineProperty
+    
+    /*Along with the inline method of declaring getters and setters, it can also be done more 
+    explicitly via Object.defineProperty (MDN Documentation). This method takes three arguments. 
+    The first is the object to add the property to, the second is the name of the property, and 
+    the third is an object that describes the property (known as the property’s descriptor). 
+    Here’s an example that replicates the above example:*/
+
+    var person = {
+        firstName: 'Jimmy',
+        lastName: 'Smith'
+    };
+
+    Object.defineProperty(person, 'fullName', {
+        get: function() {
+            return firstName + ' ' + lastName;
+        },
+        set: function(name) {
+            var words = name.split(' ');
+            this.firstName = words[0] || '';
+            this.lastName = words[1] || '';
+        }
+    });
+
+    /*The advantage here isn’t immediately apparent. Other than being able to add properties 
+    after creating the initial object, is there a real benefit?*/
+
+    /*When you define a property this way, you can do much more than just define a setter or getter. 
+    You may also pass following keys:*/
+
+    /*configurable (false by default): if this is true, the property’s configuration will be modifiable in future.
+    enumerable (false by default): if true, the property will appear when looping over the object (for (var key in obj)).
+    We can also define properties that don’t have explicit getters or setters:*/
+
+    Object.defineProperty(person, 'age', {
+        value: 42
+    });
+
+    /*This will create person.age, and set it to the value 42. It’s important to note that this property isn’t 
+    writable. Calling person.age = 99 will have no effect. In this way you can create read-only properties. 
+    If a property has a value key set, it cannot have a getter or setter. Properties can have values or accessors, not both.*/
+
+    /*Not only that, but because the enumerable property defaults to false, this property will not appear when we 
+    loop over the object’s keys.*/
+
+    //If we wanted to make a property writable, we would need to set the writable property:
+
+    Object.defineProperty(person, 'age', {
+        value: 42,
+        writable: true
+    });
+
+    //Now, person.age = 99; will have the desired effect.
+
+    /*Accessor properties are defined as one or two functions whose name is the same as the property
+    name, and with the function keyword replaced with get and/or set.*/
+
+    //Mainly, this allows you to just call a property rather than a method on an object or class:
+    let person = {
+        name: "Mitch",
+        get fullName() {
+            return this.name
+        },
+        set fullName(value) {
+            return person.name = value
+        }
+    }
+
+    //To call one of these, you would do the following:
+    person.fullName 
+    
+    //whereas, if these weren't getters, you'd have to call it like a method rather than a property
+    let person = {
+        name: "Mitch",
+        getFullName: function() {
+            return this.name
+        },
+        fullName: function() {
+            return person.name = value
+        }
+    }
+
+    //To call one of these, you would do the following:
+    person.fullName 
