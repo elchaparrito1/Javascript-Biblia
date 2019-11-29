@@ -408,3 +408,147 @@ ance a key feature of the language.*/
 
     //To call one of these, you would do the following:
     person.fullName 
+
+    //Accessor properties are inherited just as data properties are
+    //So you can use
+
+//6.7 Property Attributes   
+    /*In addition to a name and value, properties have attributes that specify whether they can be 
+    written, enumerated, and configured.*/
+    //In ECMAScript 3, there was no way to change these attributes
+    //With ECMAScript 5, an API was added to allow for this.
+    //This is Object.defineProperty(). Refer back to this section if you ever see a need for it
+
+//6.8 Object Attributes
+    //Every object has assocaited prototype, class, and extensible attributes
+//6.8.1 The prototype Attribute
+    //An object's prototype attribute specifies the object from which it inherits properties.
+    /*The prototype attribute is set when an object is created. Recall from 6.1.3 that objects created
+    from object literals use Object.prototype as their prototype*/
+    /*Objects created with 'new' use the value of the prototype property of their constructor 
+    function as their prototype.*/
+    /*Objects created with Object.create() use the first argument to that function, which 
+    may be null as their prototype*/
+
+    //You can query the prototype of any object by passing it to Object.getPrototypeOf();
+
+    /*Objects created with a new expression usually inherit a constructor property that refers to
+    the constructor function used to create the object. Constructor functions have a prototype 
+    property that specifies the prototype for objects created using that constructor*/
+
+    //Just use isPrototypeOf() method to determine if an object is the prototype of another.
+    //Just go up the chain:
+    let p = {x:1};
+    let o = Object.create(p);
+    p.isPrototypeOf(o); //true: o inherits from p
+    Object.isPrototypeOf(p); //true: p inherits from Object.prototype
+
+    /*Mozilla's implementation of JS has (since the early days of Netscape) exposed the prototype
+    attribute through the specially named __proto__ property, and you can use this property to directly
+    query or set the prototype of any object.*/
+
+    //Mozilla documentation warns that the above feature has been deprecated.
+    //They recommend sticking to and using Object.getPrototypeOf().
+
+//6.8.2 The class Attribute
+    //An object's class attribute is a string that provides information about the type of the object.
+    /*Since JS is a prototype-based language and not a class one like Java, there is no counterpart 
+    to getClass(), which is common in Java. You can use toString() which returns a string of the form:*/
+    
+    //The tricky part though is that many objects inherit the other more useful toString() methods
+    //You must do so indirectly as follows:
+    function classof(o) {
+        if (o === null) return "Null";
+        if (o === undefined) return "Undefined";
+        return Object.prototype.toString.call(o).slice(8, -1);
+    }
+
+    classof(Object); //returns "Object"
+    classof(val); //returns "Number", if val equals an integer
+    classof(new Array); //returns "Array" b/c it is a built-in constructor the name will match the constructor
+    classof(new Date); //returns "Date" b/c it is a built-in constructor the name will match the constructor
+    classof(/./); //returns "Regexp"
+
+    //Any object you yourself create will always have the class attribute of "Object"
+
+//6.8.3 The extensible Attribute
+    //The extensible attribute of an object specifies whether or not new properties can be added to an object.
+    /*The purpose of the extensible attribute is to be able to lock down objects into a known state
+    and prevent outside tampering. The extensible object attribute is often used in conjunction with
+    the configurable and writable property attributes, and ECMAScript 5 defines functions that make it
+    easy to set these attributes together*/
+
+    Object.seal() //works like .preventExtension() by making it nonextensible and making own obj props nonextensible
+    Object.freeze() //locks objects down even more tightly. Same as .seal() but also makes own obj props read only
+
+    //The above methods affect only the object to which they're passed.
+    //They have no effect on the prototype of that object.
+
+//6.9 Serializing Objects
+    //Object serialization is the process of converting an obj's state to string from which it can later be restored.
+    JSON.stringify();
+    JSON.parse();
+    //JSON syntax is a subset of JS syntax, and it cannot represent all JS values.
+    //Object, arrays, strings, finite numbers, true, false, and null can all be serialized.
+    //NaN, Infinity, and -Infinity are serialized to null.
+    //Function, RegExp, and Error objects and undefined values cannot be serialized or restored
+    //JSON.stringify() serializes only the enumerable own properties of an object.
+
+//6.10 Object Methods
+    //As discussed, all JS objects inherit properties from Object.prototype.
+    //These inherited properties are primarily methods.
+
+    //6.10.1 The toString() Method
+        //The toString() method takes no arguments
+        //It returns a string that somehow represents the value of the object
+        //The default toString() method is not very informative.
+        //For example, the following line of code simply evaluates to the string "[object Object]":
+            let s = { x:1, y:1}.toString();
+        /*B/c this default method does not display much useful info, many classes defined their 
+        own versions of toString().*/
+
+        //As noted, this is the default serialization of an object. 
+            //But why is it [object Object] and not just [object]?
+
+            //That is because there are different types of objects in Javascript!
+
+            //Function objects:
+            stringify(function (){}) //-> [object Function]
+            //Array objects:
+            stringify([]) //-> [object Array]
+            //RegExp objects
+            stringify(/x/) //-> [object RegExp]
+            //Date objects
+            stringify(new Date) //-> [object Date]
+            /*… several more …
+            and Object objects!*/
+            stringify({}) //-> [object Object]
+            
+            /*That's because the constructor function is called Object (with a capital "O"), and the 
+            term "object" (with small "o") refers to the structural nature of the thingy.*/
+
+            /*Usually, when you're talking about "objects" in Javascript, you actually mean "Object 
+            objects", and not the other types.*/
+
+            //where stringify should look like this:
+
+            function stringify (x) {
+                console.log(Object.prototype.toString.call(x));
+            }
+    
+    //6.10.2 The toLocaleString() Method
+        //The purpose of this method is to return a localized string repsentation of the object.
+        //The default toLocaleString() method defined by Object doesn't do any localization itself
+            //It simply calls toString() and returns that value.
+
+    //6.10.3 The toJSON() Method
+        //Object.prototype does not actually define a toJSON() method
+        //But the JSON.stringify() method looks for a toJSON() method on any object it is asked to serialize
+    
+    //6.10.4 The valueOf() Method
+        //Used when JS needs to convert an object to some primitive type other than a string.
+        //This is typically used to convert it to a number.
+        //It is automatically called in the context of when an obj is used where a primitive value is expected
+        
+
+    

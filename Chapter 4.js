@@ -1,4 +1,4 @@
-  //An expression is a phrase of JavaScrip that a JavaScript interpreter can evaluate to produce a value
+  //An expression is a phrase of JavaScript that a JavaScript interpreter can evaluate to produce a value
 
 //A variable name is a simple expression that evaluates to whatever value has been assigned to that variable.
 
@@ -19,7 +19,7 @@
     //finally, the third type of primary expression is the bare variable reference:
     i //Evaluates to the value of the variable i
     sum //Evaluates to the variable sum
-    undefined //undefined is a global variable, not a keywordlik null
+    undefined //undefined is a global variable, not a keyword lik null
 
     //Object and array initializers are expressions whose value is a newly created object or array.
     //These initializer expressions are sometimes called object literals and array literals.
@@ -29,8 +29,8 @@
     //Array initializer:
     [1+2,3+4] //2-element array. First element is 3. Second is 7.
 
-    /*The element expressions in an array initializer can themselves be array initializers, whcih means that these
-    expressions can created nested arrays:*/
+    /*The element expressions in an array initializer can themselves be array initializers, which means that these
+    expressions can create nested arrays:*/
     let matrix = [[1,2,3], [4,5,6], [7,8,9]]
 
     /*The initializer for an array is a comma-separated list of constant expressions enclosed in braces ( { } ). 

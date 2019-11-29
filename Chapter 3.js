@@ -290,9 +290,23 @@ destroyed. So when you go to look up the property later, there is nothing there 
                     return true;
                 }
 
+                //or
+
+                function compareArrays(a,b) {
+                    if(array1.sort().join(',') !== array2.sort().join(',')){
+                        return false
+                    }
+                    
+                    return true
+                } /*The nice thing about this function is that even if the numbers or values 
+                    are out of order, the function will still be able to compare all values 
+                    to see if they're equal*/
+
+                //One thing to account for with strings would be upper and lowercase letters
+
 //3.8 - Type Conversions
     //JS is very flexible about types of values it requires.
-        //If it wants a string, it will convert whateer value you give it to a string:
+        //If it wants a string, it will convert whatever value you give it to a string:
         10 + " objects" // => "10 objects"
         //or a number:
         "7" * "4"; // => 28
@@ -305,16 +319,16 @@ destroyed. So when you go to look up the property later, there is nothing there 
     0, -0 //false new Number(-(0)
     Infinity // true new Number(Infinity)
 
-    /*String that can be parsed as numbers convert to those numbers. Trailing or leading
+    /*Strings that can be parsed as numbers convert to those numbers. Trailing or leading
     spaces are allowed. However, any trailing or leading spaces that are not part of a
-    numeric literal or converted into NaN*/
+    numeric literal are converted into NaN*/
 
     //Primitive to object conversions are straightforward: primitve values convert to their wrapper object.
 
     //Conversions and Equality
         //You know that == is pretty flexible when it comes to comparisons:
                 null == undefined //true
-                "0" == 0 //string converts than is consider true
+                "0" == 0 //string converts then is consider true
                 0 == false // true
                 "0" == false // true
         //=== does not perform conversion when comparing
@@ -394,8 +408,9 @@ destroyed. So when you go to look up the property later, there is nothing there 
     //Otherwise, JS cannot obtain a primitive value from either toString() or valueOf().
     //For converting to a number, JS follows the same steps, but tries with valueOf() first.
 
-    /*The "+" operator in JS is used for addition and string concatenation. If either of its operands is an object, js converts 
-    the object using a special object-to-primitive conversion rather than the object-to-number conversion*/
+    /*The "+" operator in JS is used for addition and string concatenation. If either of its 
+    operands is an object, js converts the object using a special object-to-primitive conversion 
+    rather than the object-to-number conversion*/
         typeof(now + 1) // "string": + converts dates to strings
         typeof(now - 1) //"number": - uses object-to-number conversion
         let now = new Date();
@@ -413,6 +428,7 @@ destroyed. So when you go to look up the property later, there is nothing there 
     }
 
     console.log(checkscope()) //returns "local"
+
     //Although you can get away with not using "let, var, const" when in the global scope, you must always use this with local variables.
 
     scope = "global"
@@ -425,14 +441,14 @@ destroyed. So when you go to look up the property later, there is nothing there 
 
     console.log(checkScope(), scope) //This is the global scope, but would log as "local"
 
-    /*In some C-like languages, each block of code within curly braces ahs its own scope, 
+    /*In some C-like languages, each block of code within curly braces has its own scope, 
     and variables are not visible outside of the block in which they are declared. This is
     called block scope and JS does not have it. Instead, JS uses function scope - variables
-    are visible within the funtion in which they are defined and within any functions that 
+    are visible within the function in which they are defined and within any functions that 
     are nested within that function.*/
 
     /*Function scope means that all variables declared within a function are visible throughout
-    the body of the function. Buriously, this means that variables are even visible before they
+    the body of the function. Obviously, this means that variables are even visible before they
     are declared, which of course is known as hoisting*/
 
     function f() {
@@ -445,7 +461,7 @@ destroyed. So when you go to look up the property later, there is nothing there 
     for which the variable is defined. Global variables are defined throughout the program. Local variables are 
     defined throughout the function in which they are declared.*/
 
-    /*If we think of local variables as properties of some kind of implementation-defined-boject, then there is 
+    /*If we think of local variables as properties of some kind of implementation-defined-object, then there is 
     another way to think about variable scope. Every chunk of JS code has a scope chain associated with it.*/
 
     /*The scope chain is a list or chain of objects that defines the variables that are "in scope" for that code. 
