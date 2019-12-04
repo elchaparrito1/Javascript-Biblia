@@ -47,7 +47,7 @@
     /*If the value is null or undefined, the expression shows a TypeError, since these
     are two JS values that cannot have properties.*/
 
-    /*dot notation is the sipmler of the simpler of the two property access options.
+    /*dot notation is the simpler of the two property access options.
     But notice that it can only be used when the property you want to access has a name,
     and when you know the name of that identifier.*/
 
@@ -92,7 +92,7 @@
             //The function can then use "this" to initialize the properties of the newly created object
     
     //Functions written for use as constructors do not return a value
-    //And the value of the object creation expression is the newly created an initialized object
+    //And the value of the object creation expression is the newly created and initialized object
 
 //4.7.3
     //Lvalues are an expression that can legally appear on the left side of an assignment expression.
@@ -141,13 +141,13 @@
         let e = false;
         let f = false;
 
-        console.log(e + f); //1
+        console.log(e + f); //0
     
     //Other operations also have their little tricks:
         let a = "split";
         let b = "us";
 
-        console.log(a - b); //NaN. Subtraction does behave like + and just concantenate them
+        console.log(a - b); //NaN. Subtraction does not behave like + and just concantenate them
 
         let c = 12;
         let d = "1";
@@ -157,7 +157,7 @@
         let e = 2;
         let f = "2.2";
 
-        console.log(e * f); //4.4. JS cannot bild strings out of * operations.
+        console.log(e * f); //4.4. JS cannot build strings out of * operations.
                             //The string, therefore, is coerced into a value.
 
         let g = 2;
@@ -189,7 +189,7 @@
     console.log(j++); //2
 
     //Note that ++ never performs string concatenation.
-    //It ALWAYS converts its operand to a  number and increments it.
+    //It ALWAYS converts its operand to a number and increments it.
     let x = "1";
     console.log(x + 1); //"11"
     console.log(++x); //2
@@ -219,11 +219,11 @@
       strings may have the same meaning and the same visual appearance, but 
       still be encoded using different sequences of 16-bit values*/
 
-    //If both values refer to the same object, arry, or function, they are equal.
+    //If both values refer to the same object, array, or function, they are equal.
 
     //The == operator is less strict
 
-    //Use the following rules to and type conversions to check for equality:
+    //Use the following rules and type conversions to check for equality:
       //If one value is null and the other is undefined, they are equal
       //If one value is a string, and the other is a number, convert the string and compare
       //If either value is true, convert it to 1 and try the comparison again.
@@ -237,9 +237,12 @@
       //Next, the string is converted to a number then compared again.
 
     //Comparison Operators have some important rules as well:
-        //If either operand evaluates to an object, thi gets converted into a primitive like in 3.8.3
-        //If, after this conversion, both operands are strings, the two strings are compared, using alphabetical order, where where the order is defined by the numerical order of the 16-bit Unicode values.
-        //If after an object conversion, at least one operand is not a string, both are converted to numbers and compared numerically.
+        //If either operand evaluates to an object, this gets converted into a primitive like in 3.8.3
+        /*If, after this conversion, both operands are strings, the two strings are compared, using 
+        alphabetical order, where the order is defined by the numerical order of the 16-bit 
+        Unicode values.*/
+        /*If after an object conversion, at least one operand is not a string, both are converted to 
+        numbers and compared numerically.*/
 
     //Remember that string comparison is case sensitive.
         //so all capital letters are less than lowercase.
