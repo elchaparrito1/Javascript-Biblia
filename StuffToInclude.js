@@ -488,3 +488,51 @@ addedAges(sortedAges); //[ 46, 49, 51, 53, 51, 53, 55, 56, 58, 60 ]
         BSTtest.insertNumberNode(15);
         BSTtest.insertNumberNode(6);
         BSTtest;
+
+//You know that primitive variables pass by value
+//object variables are passed by reference
+//Note though the nuances of this here:
+let a = 1
+funky = (a) => {
+  a = 2
+};
+funky(a);
+console.log(a); //2
+let a = {a:1,b:2}
+funky = (a) => {
+  a.c = 3
+};
+funky(a);
+console.log(a); //This will actually be [object Object] {a:1,b:2,c:3}
+
+//Runtime complexities to know. There are others, but these are the ones to remember:
+  /*Constant time: No matter how many elements we're working with, the algorithm will always take the
+                   same amount of time*/
+    1
+
+  /*Logarithmic time: This is when if doubling the amount of elements one is iterating over will not
+                      double the amount of work. Always assume that searching operations are log(n)*/
+    log(n)
+  
+  /*Linear time: Iterating through all elements in a collection of data. If you see a for/loop spanning
+                 from 0 to array.length, you probably have 'n' or linear time*/
+    n
+
+  /*Quasilinear time: You have this if doubling the number of elements you are iterating over doesn't 
+                      double the amount of work. Always assume that any sort opertation is n*log(n)*/
+    n*log(n)
+
+  /*Quadratic time: Every element in a collection has to be compared to every other element. This is
+                    known as the 'handshake problem'. This means that if you had a group of people in
+                    a room, and a new person walked into the room, they'd have to shake everyone's 
+                    hand*/
+    n^2
+
+  //Exponential time: If you add a single element to a collection, the processing power required doubles
+    2^n
+
+  //Big O Notation is another way of measuring runtime complexity
+    //O(n) => linear
+      //examples include: iterating over a for/loop with a single collection
+    //O(1) => Constant
+    //O(n^2) => Quadratic

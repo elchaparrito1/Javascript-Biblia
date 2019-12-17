@@ -211,6 +211,12 @@
     //If one or both values is NaN, they are not equal
       //The NaN value is never equal to any other value, including itself!
       //To check if a value is NaN, use x !== x.
+        //This reason this works so well is b/c again, NaN is not equal even to itself.
+        //So, when you compare x to itself, if it is NaN, then it won't be equal to itself.
+      //You could also use isNaN() function. It comes with its own pitfalls as well though:
+        isNaN(1); //false => this is straightforward
+        isNaN("A"); //true => this is straightforward
+        isNaN("1"); //false => this gets coerced into a numeric value, which makes it false
     //If both values are numbers and have the same value, they are equal.
       //If one value is 0 and the other is -0, they are also equal.
     /*If both values are strings and contain exactly the same 16-bit values 
@@ -235,6 +241,8 @@
       "1" == true; 
       //The boolean first gets converted to 1; then the comparison is done again.
       //Next, the string is converted to a number then compared again.
+      false == 'false' //false => this is b/c it chooses to convert the string to boolean which = true
+                       //this is b/c it is not an empty string, which makes it true
 
     //Comparison Operators have some important rules as well:
         //If either operand evaluates to an object, this gets converted into a primitive like in 3.8.3
@@ -372,7 +380,7 @@
     let username = req.body.username || "Bob"
 
 //4.10.3 Logical NOT (!)
-  //Unlike && and ||, hte ! operator converts its operand to a boolean value before inverting the value.
+  //Unlike && and ||, they6 ! operator converts its operand to a boolean value before inverting the value.
   //This means that ! always returns true or false
 
 //4.11 Assignment Expressions

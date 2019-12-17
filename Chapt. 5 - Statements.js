@@ -35,7 +35,7 @@
         console.log("What does cos do on the Math object?");
     }
 
-    //A compound statement allows you to use multiple statements where JS syntax expects a singl statement.
+    //A compound statement allows you to use multiple statements where JS syntax expects a single statement.
 
     //The empty statement is the opposite. 
     //It allows you to include no statements where one is expected. It looks like this:
