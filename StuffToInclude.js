@@ -536,3 +536,282 @@ console.log(a); //This will actually be [object Object] {a:1,b:2,c:3}
       //examples include: iterating over a for/loop with a single collection
     //O(1) => Constant
     //O(n^2) => Quadratic
+
+  //Note that this question can come up in interviews about closures
+  //This pertains more to a defeciency we see with the var keyword
+  //With a closure like this, it only equals i
+  /*It is part of the outer scope of the for/loop, which the for/loop
+  runs until it reaches 10. Then the value of the closure gets analyzed
+  as 10*/
+    let foo = [];
+    for (var i = 0; i < 10; i++) {
+      foo[i] = function() { return i };
+    }
+    console.log(foo[0]()); //10
+    console.log(foo[1]()); //10
+    console.log(foo[2]()); //10
+  //This of course can be fixed or rectified by simply changing var to let
+  //You could also implement an IIFE on the closure to capture each value of i
+    let foo = [];
+    for (let i = 0; i < 10; i++) {
+      foo[i] = function() { return i };
+    }
+    console.log(foo[0]()); //0
+    console.log(foo[1]()); //1
+    console.log(foo[2]()); //2
+
+  //In great detail, let fixes a lot of problems that var caused:
+  for(var i = 0; i < 10; i++) {
+    console.log(i); //These all log 0-9
+  }
+  //Two problems arise from this though:
+  //First
+    //But, if you type i into the console, outside of the for/loop you get 10
+    console.log(i); //10
+    //So we have the global variable that has leaked into the window object
+    //It should just be a placeholder value used within the for/loop
+  //Second
+    //This can definitely throw off asynchronous requests:
+    for(var i = 0; i < 10; i++) {
+      console.log(i);
+      setTimeout(function() {
+        console.log('The number is ' + i);
+      },1000);
+    }
+  /*If we run this, all of them are 10. The reason that we have that is 
+  because, console.log(i) will run immediately and reference whatever i 
+  is.*/
+  /*However, after one second, this entire loop has already gone through 
+  every iteration that it needs to and the variable i here is being 
+  overwritten every single time. So by the time setTimeout() runs, i is
+  already at 10.*/
+  //Obviously let can fix this or an IIFE:
+    for(let i = 0; i < 10; i++) {
+     console.log(i);
+     setTimeout(function() {
+       console.log('The number is ' + i);
+     },1000);
+    }
+  /*What do we know about let? It's block-scoped. We have curly brackets 
+  in the for loop. If you run it now, after a second we'll log zero 
+  through nine. We're not getting 10, 10 times. We getting it as it was 
+  declared each and every time.*/
+  /*As a note, you couldn't use a const for this because it needs to 
+  overwrite itself, and you can't assign the same variable twice. When 
+  we use let, it's going to scope i to our curly brackets.*/
+
+  //On fat arrow functions vs regular JS functions
+  //While there are some similarities, some differences do exist:
+  // (param1, param2, paramN) => expression
+  // ES5
+  var add = function(x, y) {
+    return x + y;
+  };
+// ES6
+  let add = (x, y) => { return x + y };
+//The ES6 version is less code.
+//It can be even shorter if only one expression exists:
+  let add = (x, y) => x + y;
+//arguments do not have arguments binding
+/*However, they have access to the argument object of 
+  the closest non-arrow parent function ... what?*/
+/*Well, named and rest parameters are heavily relied upon 
+  to capture the arguments passed to arrow functions*/
+//In the case of a regular function:
+  let myFunc = {  
+   showArgs(){ 
+    console.log(...arguments); 
+   } 
+  }; 
+  myFunc.showArgs(1, 2, 3, 4); //logs and object of {0:1,1:2,2:3,3:4}
+//In the case of an arrow function:
+  let myFunc = {  
+    showArgs : () => { 
+     console.log(...arguments); 
+   } 
+  }; 
+  myFunc.showArgs(1, 2, 3, 4); //ReferenceError: arguments is not defined
+//Unlike regular functions, arrow functions do not have their own 'this'
+  /*The value of this in an arrow function remains the same throughout the
+    lifecycle of the function and always bound to the value of this in
+    the closest non-arrow parent function.*/
+  let me = { 
+   name: "Ashutosh Verma", 
+       thisInArrow:() => { 
+     console.log("My name is " + this.name); // no 'this' binding here 
+   }, 
+   thisInRegular(){ 
+       console.log("My name is " + this.name); // 'this' binding works here 
+     } 
+    };
+   me.thisInArrow(); //My name is
+   me.thisInRegular(); //My name is Ashutosh Verma
+  //This is actually a good thing b/c it resolves the this pointer uncertainty:
+  var message = "Hello World";
+  function printMessage(){
+   console.log(this.message);
+  };
+  var jsObject = {
+     printMessageES5:function (){
+    console.log(this.message);
+   }
+  };
+  printMessage();               // output: Hello World
+  jsObject.printMessageES5();   // output: undefined
+  /*So, when our code looked for a variable named message in jsObject, 
+  it couldn't find it. Let's fix the code and add the message variable 
+  in our object.*/
+  var message = "Hello World";
+  function printMessage(){
+   console.log(this.message);
+  };
+  var jsObject = {
+    message: this.message,
+    printMessageES5:function (){
+      console.log(this.message);
+     }
+  };
+  printMessage();               // output: Hello World
+  jsObject.printMessageES5();   // output: Hello World
+/*When we assigned a value to the internal message variable of 
+jsObject, the this pointer was still pointing to the global object.
+But earlier, when the same this pointer was used inside the function, 
+it was pointing somewhere else, i.e. to our jsObject.*/
+//Gospel by Mitch: Arrow function more carefully follows the chain, and sticks to what it is surrounded by.
+/*If you are accessing the this pointer in your function and you want it to point to the surrounding 
+code of the function definition, use the arrow syntax.*/
+    var message = "Hello World";
+    function printMessage(){
+    console.log(this.message);
+    };
+    var jsObject = {
+    message: "Hello Object",
+    printMessageES5:function (){
+    console.log(this.message);
+    },
+    printMessageES6:() => {
+    console.log(this.message);
+    }
+    };
+    printMessage();               // output: Hello World
+    jsObject.printMessageES5();   // output: Hello Object
+    jsObject.printMessageES6();   // output: Hello World
+/*Regular functions created using function declarations or expressions are 
+  constructible and callable. Since regular functions are constructible, 
+  they can be called using the new keyword.*/
+/*However, the arrow functions are only callable and not constructible, i.e 
+  arrow functions can never be used as constructor functions. Hence, they 
+  can never be invoked with the new keyword.*/
+let add = (x, y) => console.log(x + y);
+new add(2,3); //TypeError: add is not a constructor
+
+//This keyword
+//Good definition to remember:
+  //this keyword refers to the current object that the code is being written inside of
+//You know what this would reference here:
+// console.log(this); //window object
+//Or even this:
+    let obj = {
+      checkThis: function() {
+        console.log(this); 
+      }
+    }
+    obj.checkThis(); //would refer to obj; unless its an arrow function...
+//So we might always assume that this always refers to the object in which it is declared
+//But...
+  let func = obj.checkThis;
+func(); //returns window object, even as an arrow function
+//this really is determined by the way in which a function is called
+//So above, we call the function directly on obj (obj.checkThis)
+//Therefore, obj was the reference to this
+//With creating a new context with func, this gets assigned to the global object
+//This is an issue:
+    let objTwo = {
+      checkThis: function() {
+        console.log(this); //points to objTwo; arrow func would point to window obj
+        function checkOther() {
+          console.log(this); //points to window object; same as arrow
+        }
+        checkOther();
+      }
+    }
+    objTwo.checkThis();
+//The way to resolve this is not with an arrow function but as follows:
+    let objThree = {
+      checkThis: function() {
+        let that = this;
+        console.log(this); //points to objTwo; arrow func would point to window obj
+        function checkOther() {
+          console.log(that); //points to window object; same as arrow
+        }
+        checkOther();
+      }
+    }
+    objThree.checkThis();
+
+    //Another way to deal with this though could be using these methods:
+  //call()
+  //bind()
+  //apply()
+//As you know, functions are a type of object
+//So there are lots of methods that come attached to a function object:
+function asim() {
+  console.log(this);
+}
+console.log(asim.name); //returns asim
+//You can even add properties as an object:
+asim.moo = 1;
+//call() stabilizes the value of this. so:
+asim.call(); //you can pass anything in as this
+asim.call(1);
+asim.call({}); //These all get assigned as this for the call in the func
+//So back to the old example.
+//Rather than a hacky move like let that... we can use call:
+let obj = {
+  checkThis: function() {
+    console.log(this); //points to obj
+    function checkOther() {
+      console.log(this); //points to obj
+    }
+    checkOther.call(this);
+  }
+}
+obj.checkThis();
+//You can also pass parameters to call(). 
+//Parameters will be anything after the first parameter, which determines 'this'
+function a(b,c,d) {
+  console.log(this); //1
+  console.log(b); //2
+  console.log(c); //3
+  console.log(d); //4
+};
+a.call(1,2,3,4);
+
+//apply() method is similar to call()
+  //The one difference being that you pass any parameters as an array.
+  //So with the example above, it would pass as follows:
+//   a.apply(1, [2,3,4])
+  //The reason to use apply() over call():
+  function sum() {
+    let total = 0;
+    for (let i = 0; i < arguments.length; i++) {
+      total += arguments[1] //Did you know that arguments is a reserved word?
+                            //It is an array that can be used, which all functions have
+    }
+    return total
+  }
+  let nums = [13,45,63,1,4,755];
+  console.log(sum.call(null, nums)); //NaN
+    //call() would still work if the listed numbers were passed directly in as arguments
+  console.log(sum.apply(null, nums)); //270
+    //apply() should be used when dealing with a variable that is an array
+//bind() method is similar to the above, but with a little different syntax:
+let b = function() {
+console.log(this)
+}.bind(1); //this will now return 1
+console.log(b); //IMPORTANT NOTE - bind only works with function expressions:
+function b() {
+console.log(this)
+}.bind(1); 
+console.log(b); //Unexpected token error
+//this happens b/c bind() is applicable to the object that created it

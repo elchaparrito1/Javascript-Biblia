@@ -395,4 +395,72 @@
         //some() returns true the first time you predicate returns true
         //It only iterates through the entire array if your predicate always returns false
 
-        //every() is the opposit; it returns false the first time you predicate returns false
+        //every() is the opposite; it returns false the first time you predicate returns false
+
+    //7.9.5 reduce(), reduceRight()
+        /*These methods combine the elements of an array, using the function you specify to produce 
+        a single value*/
+
+        //This is a common operation in functional programming.
+        //It goes by the name inject or fold:
+        let a = [1,2,3,4,5];
+        let sum = a.reduce((x,y) => { return x+y}, 0); //15; the 0 is the initial argument called along with 1
+        let product = a.reduce((x,y) => { return x*y}, 1); //120
+        let max = a.reduce((x,y) => { return (x>y)?x:y; }); //5 (largest value);
+        //In this third examples (max), no initial value is specified.
+        //If this is the case, reduce defaults to the first element in the array.
+
+        //reduce takes two arguments.
+        //The first is a function that performs the reduction operation.
+        /*The task of this reduction function is to somehow combine or reduce two values into a single
+        value, and to return that reduced value*/
+        //The second optional argument is an initial value to pass to the function
+        //reduce is different from forEach() or map().
+
+        /*The familiar value, index, and array values are passed as the second, third, and fourth arguments.
+        The first argument is the accumulated result of the reduction so far. On the first call to the 
+        function, this first argument is the initial value you passed as the second argument to reduce(). 
+        On subsequent calls, it is the value returned by the previous invocation of the function*/
+
+        /*In the first example above, the reduction function is first called with arguments 0 and 1. It adds
+        these and returns 1. It is then called again with arguments 1 and 2 and it returns 3. Next it
+        computes 3+3=6, then 6+4=10, and finally 10+5=15*/
+
+        //Calling reduce() on an empty array with no initial value argument causes a TypeError.
+        let a = [];
+        let sum = a.reduce((x,y) => {return x + y}) //TypeError: Reduce of empty array with no initial value
+        //If call on an array with only one value, it will return that one value
+        let a = [1];
+        let sum = a.reduce((x,y) => {return x + y}) //1
+
+        //reduceRight() works just like reduce() except that it works right to left of the array
+        //You may want to do this if if the reduction has right to left precedence:
+        
+        //These two methods are not just limited to numeric types.
+        //Look up more the use of reduce and "union" with objects (object.reduce(union));
+
+    //7.9.6 indexOf() and lastIndexOf()
+        //these search an array for an element with a specified value,
+        //then return the index of the first such element found or -1 if no matches are found
+        //indexOf() searches from the beginning to the end, and lastIndexOf() in reverse order
+        a = [0,1,2,1,0];
+        a.indexOf(1); //1
+        a.lastIndexOf(1); //3
+        a.indexOf(3); //-1
+
+        //The first argument is the value to look for.
+        //The second argument is option: it specifies the array index at which to begin looking
+        //negative values are allowed and treated as an offset to start at the end of the array
+
+    //7.10 Array Type
+        //It is often useful to determine whether or not something is an array:
+        Array.isArray([]); //true
+        
+
+
+
+
+
+
+
+
