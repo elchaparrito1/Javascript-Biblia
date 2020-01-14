@@ -76,6 +76,48 @@ ance a key feature of the language.*/
     //For example, Date.prototype inherits properties from both Object.prototype and Date.prototype.
         //This linked series of prototype objects is known as the prototype chain.
 
+    //ASIDE ON PROTOTYPE, DUNDER PROTO, and CONSTRUCTOR:
+        //Dunder proto; prototype; and constructor
+        /*"Prototype is a property on a function that points to an 
+        [anonymous] object" - Tyler McGinnis*/
+        /*prototype is the object that is used to build __proto__ when you 
+        create an object with new.*/
+        /*Just remember that __proto__ is an accessor property of the 
+        Object.prototype object.*/
+        //It exposes the internal prototype link of an object through which it is accessed.
+        //constructor references back to the constructor function itself.
+            function Foo (name) {
+                this.name = name
+            }
+            Foo.prototype.greet = function() {
+                console.log(`Hello ${this.name}`);
+            }
+            let objLiteral = {};
+            let newName = new Foo("Carl");
+            let newerName = newName
+            console.log(newName); //It's constructor is Foo(name)
+            console.log(objLiteral); //It's constructor is Object()
+            console.log(Object.getPrototypeOf(newName)); //*
+            console.log(Foo.prototype); //*
+            console.log(newName.prototype); //returns undefined
+                /*prototype is not available on the instances themselves; 
+                only on the function constructor*/
+                //__proto__ is available everywhere
+            console.log(Foo.prototype.constructor); //returns the function of Foo
+            console.log(Object.getPrototypeOf(newerName)); //* 
+            console.log(newerName.__proto__ === Foo.prototype); //true
+            console.log(newName.constructor === Foo); //true
+        //*returns the Foo function prototype property, which is an object
+
+        /*JavaScript's Pseudo Classical Inheritance works like this way: 
+        I am a constructor, and I am just a function, and I hold a prototype 
+        reference, and whenever foo = new Foo() is called, I will let foo.__proto__ 
+        point to my prototype object. So Foo.prototype and obj.__proto__ are two 
+        different concepts. Foo.prototype indicates that, when an object of Foois 
+        created, this is the point where the prototype chain of the new object 
+        should point to — that is, foo.__proto__ should point to where Foo.prototype 
+        is pointing at.*/
+        
 //6.1.4 Object.create()
     //Object.create() creates a new object, using its first argument as the prototype of that object.
         //It also takes an optional second argument that describes the properties of a new object.
