@@ -280,7 +280,72 @@ once, but used or invoked any number of times.*/
     //Links:
         //https://dev.to/muhammadridwan/namespace-in-js-5dbj
         //https://medium.com/@sayes2x/hiding-variables-and-closure-in-javascript-c6d1cafbd037
-        
+        //Pg 182 of book also gives a good example that reinforces this
+
+    //Further examples:
+        function changeBy() { 
+            console.log('this is the outer function in the global namespace')
+          }
+
+          var dwightSalary = (function() {
+              var salary = 60000;
+              function changeBy(amount) {
+                  salary += amount;
+              }
+              return {
+                  raise: function(amt) {
+                      changeBy(amt);
+                  },
+                  lower: function(amt) {
+                      changeBy(amt);
+                  },
+                  currentAmount: function() {
+                      return salary;
+                  }
+              }; 
+          })();
+          console.log(dwightSalary.currentAmount()); // $60,000
+          dwightSalary.raise(20000);
+          console.log(dwightSalary.currentAmount()); // $80,000
+          dwightSalary.lower(-30000);
+          console.log(dwightSalary.currentAmount()); // $50,000
+          changeBy(); /*No name collision occurs b/c the other changeBy() 
+                      is protected in an IIFE closure*/
+          dwightSalary.changeBy(10000); /*TypeError: dwightSalary.changeBy is not a 
+                                        function*/
+          /*Using closures to namespace private functions keeps more general namespaces 
+          clean, preventing naming collisions. Neither the salary variable nor the changeBy 
+          function are available outside of dwightSalary. However, raise, lower and 
+          currentAmount all have access to them and can be called on dwightSalary.*/
+
+          /*raise, lower, and currentAmount are available outside b/c that is what is 
+          being returned*/
+          /*Remember that this follows the module design pattern within object-oriented 
+          programming*/
+
+        /*Private variables need not be exclusive to a single closure: as seen above
+        it is perfectly possible to have two or more nested functions be defined within
+        the same outer function and share the same scope chain*/
+
+        function counter() {
+            let n = 0;
+            return {
+                count: function() {return n++;},
+                reset: function() {return n = 0;}
+            }
+        }
+
+        let c = counter(), d = counter();
+        c.count(); //0
+        d.count(); //0
+        c.reset();
+        c.count(); //resets to 0
+        d.count(); //1
+    /*The counter function returns a counter object which has two methods (count, reset).
+    These two methods share access to the private variable n. And each invocation of 
+    counter creates a new scope chain and private variable, so c and d scopes work
+    independently of each other.*/
+
 //8.6 Closures
     //Like most modern-day languages, JS uses lexical scoping.
         /*Meaning functions are executed using the variable scope that was in effect 
@@ -328,4 +393,29 @@ once, but used or invoked any number of times.*/
             /*JS functions are executed using the scope chain that was in effect 
             when defined*/
 
+//8.7 Function Properties, Methods, and Constructor
+    //functions are values in JS as you recall.
+    //typeof function would return string function
+    //but we know that functions are a specialized kind of object
+    //as objects, they can have properties and methods
+    //recall there is even a function constructor to create new function objects
+    //many of these methods are outlined below
+
+//8.7.1 The length Property
+    /*Within the body of a function, arguments.length specifies the number of
+    arguments that were passed to the function.*/
+
+    function test(a,b,c,d) {
+        console.log(arguments.length);
+      }
+      
+      test("str", true, false, 3); //4
+
+    //Its not worried about parameters; just arguments
+
+    function test(a,b,c,d) {
+        console.log(arguments.length);
+      }
+      
+      test("str", true, false); //3
 

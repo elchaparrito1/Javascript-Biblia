@@ -118,6 +118,8 @@ ance a key feature of the language.*/
         should point to — that is, foo.__proto__ should point to where Foo.prototype 
         is pointing at.*/
         
+        //Good article: https://hackernoon.com/understand-nodejs-javascript-object-inheritance-proto-prototype-class-9bd951700b29
+        
 //6.1.4 Object.create()
     //Object.create() creates a new object, using its first argument as the prototype of that object.
         //It also takes an optional second argument that describes the properties of a new object.
