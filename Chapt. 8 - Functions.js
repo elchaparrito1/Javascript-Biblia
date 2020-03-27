@@ -419,3 +419,85 @@ once, but used or invoked any number of times.*/
       
       test("str", true, false); //3
 
+//8.7.2 The prototype Property
+    //Every function has a prototype property.
+    //It refers to an object known as the prototype object.
+    //Every function has a different prototype object.
+    /*When a function is used as a constructor, the newly created object inherits 
+    properties from the prototype object*/
+    //Refer to 6.1.3 for more details
+
+//8.7.3 The call() and apply() Methods
+    /*These methods allow you to indirectly invoke a function as if it were a method 
+    of some other object*/
+    //First argument in both cases is the object on which the func is to be invoked
+      //This is essentially the invocation context and becomes the value of 'this'
+      //Invoke f() as a method of object o:
+      f.call(o);
+      f.apply(o);
+
+      //Under the hood, this is what these two methods are doing:
+      o.m = f;
+      o.m();
+      delete o.m;
+
+    //Any arguments after the first invoke context argument are the values passed to the function
+    f.call(o, 1, 2);
+
+    //Remember that apply uses an array:
+    f.apply(o, [1,2]);
+
+    //With apply() you can invoke a function with the same arguments as the current function
+    //Just by passing the arguments array directly:
+    function trace(o, m) {
+        let original = o[m];
+        o[m] = function() {
+            console.log(new Date(), "Entering:", m)
+            let result = original.apply(this, arguments);
+            console.log(new Date(), "Exiting:", m);
+            return result;
+        }
+    }; //this dynamic alteration of existing methods is sometimes called "monkey-patching"
+
+//8.7.6 The Function() Constructor
+    //Functions are usually defined using the function keyword.
+    //Either as a function definition statement, or a function literal expression.
+    //But they can also be defined with the function constructor:
+    
+        let f = new Function("x", "y", "return x*y;");
+
+    //equivalent to:
+
+        let f = function(x,y) { return x*y }
+
+    //The Function() constructor creates anonymous functions, like function literals.
+    //Important points of the constructor:
+        //It allows functions to be created dynamically and compiled at runtime
+        /*It parses the function body and creates a new function object each time
+        it is called. If in a loop, it will be re-created and compiled each time, 
+        which isn't efficient. In contrast, function definitions are not recompiled
+        on each iteration*/
+        /*The functions it creates do not use lexical scoping; instead they are always
+        compiled as if they were top-level functions:*/
+
+        let scope = "global";
+        function constructorFunction() {
+            let scope = "local";
+            return new Function("return scope"); //returns global!
+        }
+
+        //This line returns global b/c the function returned has no local scope
+        //This constructor should rarely be used
+
+//8.7.7 Callable Objects
+    /*7.11 taught us about array-like objects that are not true arrays but can be 
+    treated that way for our purposes*/
+    //A similar situation exists for functions:
+    //A callable object is any object that can be invoked in a function expression.
+
+    //A common situation for these callable objects are RegExp objects.
+    //In many browsers, you can invoke a RegExp object directly as a shortcut.
+    //This is completely non-standard
+
+//8.8 Functional Programming
+    //

@@ -109,17 +109,17 @@ ance a key feature of the language.*/
             console.log(newName.constructor === Foo); //true
         //*returns the Foo function prototype property, which is an object
 
-        /*JavaScript's Pseudo Classical Inheritance works like this way: 
+        /*JavaScript's Pseudo Classical Inheritance works this way: 
         I am a constructor, and I am just a function, and I hold a prototype 
         reference, and whenever foo = new Foo() is called, I will let foo.__proto__ 
         point to my prototype object. So Foo.prototype and obj.__proto__ are two 
-        different concepts. Foo.prototype indicates that, when an object of Foois 
+        different concepts. Foo.prototype indicates that, when an object of Foo is 
         created, this is the point where the prototype chain of the new object 
         should point to — that is, foo.__proto__ should point to where Foo.prototype 
         is pointing at.*/
         
         //Good article: https://hackernoon.com/understand-nodejs-javascript-object-inheritance-proto-prototype-class-9bd951700b29
-        
+
 //6.1.4 Object.create()
     //Object.create() creates a new object, using its first argument as the prototype of that object.
         //It also takes an optional second argument that describes the properties of a new object.
