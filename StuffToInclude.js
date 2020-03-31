@@ -815,3 +815,134 @@ console.log(this)
 }.bind(1); 
 console.log(b); //Unexpected token error
 //this happens b/c bind() is applicable to the object that created it
+
+//Constructor pattern vs prototype pattern vs classical pattern
+  //Just remember the following of each:
+
+  //Constructor Pattern
+  function Person(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+
+    this.fullName = function() {
+      return `My name is ${this.firstName} ${this.lastName}`
+    }
+  } 
+
+  let steve = new Person("Steve", "Johnson");
+
+  //Prototype Pattern (Prototypal Inheritance) - creates a blueprint obj that helps create any other objects
+  function Person(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  Person.prototype.fullName = function() {
+    return `My name is ${this.firstName} ${this.lastName}`
+  }
+
+  let carl = Object.create(Person); 
+
+  //Class Pattern (Classical Inheritance) - ES6 feature that is just sugar on top of prototypes
+  class Person {
+    constructor(firstName, lastName) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+    }
+  }
+
+  //Main take aways:
+    /*Keeping in mind that functions are first-class citizens in Javascript, we can deal with them 
+    just like objects, in this case we're only adding a property to an instance of a function object. 
+    Thats only part of the story, you must also know that any method attached via this will get re-
+    declared for every new instance we create, which could affect the memory usage of the application 
+    negatively if we wish to create so many instances.*/
+
+    /*Apart from low memory usage, the prototype approach is obviously faster in execution when creating 
+    new object instances since no time is spent on re-declaring any methods. However, there will be a 
+    slight decrease in the speed of invoking a method in comparison to the first approach. This is because 
+    when calling getFull the Javascript runtime will check for the method on the instance of the Person it 
+    won't be found there directly so it will then check the prototype of Person to find it.*/
+
+      {
+      let a = "hi";
+      var b = "bye";
+      }
+      console.log(b); //"bye"
+      console.log(a); //ReferenceError: a is not defined
+      console.log(b); //Would not run
+
+    /*What is “this” keyword in JavaScript this keyword refers to an object, that object which is executing 
+    the current bit of javascript code.*/
+
+    /*In other words, every javascript function while executing has a reference to its current execution 
+    context, called this. Execution context means here is how the function is called.*/
+
+    //Notice what this refers to here:
+      function checkThis() {
+        console.log(this); //window object
+      }
+      checkThis(); //Note the function is executed or called in the global scope, which leads to the window reference.
+      
+      let obj = {
+        checkThis: function() {
+          console.log(this); //refers to obj context
+        }
+      }
+      
+      obj.checkThis(); //"this" refers to obj b/c it is the context of the method checkThis
+    
+    //but what about this:
+      let func = obj.checkThis;
+      func(); //Now it once again points to the global object, but why?
+      //B/c again look at context of execution
+      //func() technically looks like this window.func().
+      //So its not called as a method of the obj context, but as an assumed function within the window object
+    
+    //Whereas with the other call (obj.checkThis()), obj becomes the context to the left of the dot notation
+      let objTwo = {
+        checkThis: function() {
+          console.log(this); //refers to objTwo context
+          function checkThat() {
+            console.log(this); //refers to window object context
+          }
+          checkThat();
+        }
+      }
+    /*The reason for this is as follows: this is not part of the closure scope, it can be thought of 
+    as an additional parameter to the function that is bound at the call site. If the method is not 
+    called as a method (lacking the dot notation) then the global object is passed as this.*/
+
+    //Currying:
+    /*Briefly, currying is a way of constructing functions that allows partial application of a 
+    function’s arguments. What this means is that you can pass all of the arguments a function 
+    is expecting and get the result, or pass a subset of those arguments and get a function back 
+    that’s waiting for the rest of the arguments. It really is that simple.*/
+
+    //So this:
+    const greet = function(greeting, name) {
+      console.log(`${greeting}, ${name}`);
+    };
+    greet("Hello", "Heidi"); //"Hello, Heidi"
+
+    //Becomes this:
+    const greetCurried = function(greeting) {
+      return function(name) {
+        console.log(`${greeting}, ${name}`);
+      };
+    };
+
+    /*This tiny adjustment to the way we wrote the function lets us create a new function for any 
+    type of greeting, and pass that new function the name of the person that we want to greet:*/
+
+      let greetHello = greetCurried("Hello");
+      greetHello("Heidi"); //"Hello, Heidi"
+      greetHello("Eddie"); //"Hello, Eddie"
+
+    /*We can also call the original curried function directly, just by passing each of the 
+    parameters in a separate set of parentheses, one right after the other:*/
+
+      greetCurried("Hi there")("Howard");
+
+    /*With curried functions you get easier reuse of more abstract functions, since you get 
+    to specialize. Let's say that you have an adding function*/
