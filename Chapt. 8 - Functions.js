@@ -500,4 +500,52 @@ once, but used or invoked any number of times.*/
     //This is completely non-standard
 
 //8.8 Functional Programming
-    //
+    //According to the book, JS is not a functional programming language by nature.
+    /*Techniques are shown in the subsequent sections though of how the language might 
+    be turned into a functional programming language*/
+
+    //.map() or reduce() methods allow us to turn something like this:
+    let data = [1,1,2,5,6,7];
+    mean = () => {
+        let mean = null;
+
+        for (let i = 0; i < data.length; i++) {
+            mean += data[i];
+        }
+
+        return mean / data.length;
+    }
+
+    //This could become functional as follows:
+    let sum = function(x,y) {x + y};
+
+    let data = [1,1,2,5,6,7];
+    let mean = data.reduce(sum)/data.length;
+
+//8.8.2 Higher-Order Functions
+    //Which are functions that operate on other functions.
+        //Taking one or more functions are arguments.
+        function not(f) {
+            return function() { //return a new function
+                let result = f.apply(this, arguments); //that calls f
+                return !result //and negates its result
+            }
+        }
+    //This is a HOF b/c it takes a function argument and returns a new function
+
+//8.8.4 Memoization
+    //Caching in functional programming is known as memoization
+    //This code uses a HOF that accepts a function argument and returns a memoized version of it
+
+    //If all args of f have distinct string representations, it will return this version
+    function memoize(f) {
+        let cache = {}
+
+        return function() {
+            //create a string version of the args to use a cache key
+            let key = arguments.length + Array.prototype.join.call(arguments, ",");
+            if (key in cache) return cache[key];
+            else return cache[key] = f.apply(this, arguments);
+        }
+    }
+    

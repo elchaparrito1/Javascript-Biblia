@@ -946,3 +946,252 @@ console.log(b); //Unexpected token error
 
     /*With curried functions you get easier reuse of more abstract functions, since you get 
     to specialize. Let's say that you have an adding function*/
+
+  //Callbacks; Promises; Asynchronous Callbacks; Async/Await:
+    /*Aside: Because JavaScript is a synchronous language by design, and because the event loop 
+    is implemented in the JavaScript engines that are part of browsers and application servers, 
+    all of the asynchronous functionality in JavaScript is implemented in external libraries. 
+    In fact, even commonly used asynchronous functions like setTimeout() are provided by 
+    libraries and interfaces.*/
+
+    //Main thing to keep in mind is that not all callbacks are asynchronous.
+  //But all async functions have callbacks.
+
+  //Well what is a callback?
+  //def: A function that executes after another function has executed
+  //Tall tale signs of a callback is where a function is passed as a param
+
+  //Example:
+  function doHomework(subject, callback) {
+    console.log(`Starting my ${subject} homework.`);
+    callback();
+  }
+  
+  doHomework('math', function() {
+    console.log('Finished my homework');
+  });
+
+  //Callbacks don't always have to be in the function call though:
+  function doMoreHomework(subject, callback) {
+    console.log(`Starting my ${subject} homework.`);
+    callback();
+  }
+
+  function alertFinished(){
+    console.log('Finished my homework');
+  }
+
+  doMoreHomework('math', alertFinished);
+
+  //Remember what these are called though in reference:
+
+  //Any function that receives another function as an argument is:
+    //Higher Order Function
+  
+  //And any function passed in as that argument is:
+    //Callback function
+
+  function higherOrderFunction(x, callback) {
+    return callback()
+  }
+
+  //Common example of callbacks:
+    //.map
+    //setTimeout
+    //Click events
+      /*This is b/c a callback says not to continue on the synchronous
+      thread of JS until something gets resolved. So something like a 
+      click events says, don't do this other thing until someone clicks a 
+      certain button.*/
+
+  //A traditional, async callback from JQUERY's getJSON method looks like this:
+    const id = 'tylermcginnis'
+
+    $.getJSON({
+      url: `https://api.github.com/users/${id}`,
+      success: updateUI,
+      error: showError,
+    });
+
+    //Note how there are two paths that make it an async callback:
+      //success: if the api call is successful follow that path.
+      //error: if there is an error, follow that path.
+
+  //Callbacks though of course can have issues such as callback hell:
+      const id = 'tylermcginnis'
+
+      $("#btn").on("click", () => {
+        $.getJSON({
+          url: `https://api.github.com/users/${id}`,
+          success: (user) => {
+            $.getJSON({
+              url: getLocationURL(user.location.split(',')),
+              success (weather) {
+                updateUI({
+                  user,
+                  weather: weather.query.results
+                })
+              },
+              error: showError,
+            })
+          },
+          error: showError
+        })
+      })
+
+    //Our brains think sequentially. 
+    //So asynchronous callbacks become very difficult for our brains to follow
+
+    //That is where Promises come in, which make more sense to our brains.
+    /*This is b/c, again, the callbacks above happen asynchronously, which
+    makes it tough for our brains to follow because it bounces from callback
+    to callback. Promises on the other hand are always in one of three states
+    that are easy for our brains to manage:*/
+      //Pending
+      //Fulfilled
+      //Rejected
+
+    //When you make an asynchronous request with a promise, the status is pending
+    //If successful, status becomes fulfilled and rejected if it fails.
+
+    //Template:
+    const promise = new Promise((resolve, reject) => {
+      resolve();
+      reject();
+    }); //create a new instance of Promise constructor
+        //It will either be resolved, or rejected
+
+    //Example:
+    function onSuccess () {
+      console.log('Success!')
+    }
+    
+    function onError () {
+      console.log('💩')
+    }
+    
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve() //changed Promise status to fufilled on line 123
+      }, 2000)
+    })
+    
+    promise.then(onSuccess)
+    promise.catch(onError)
+
+    //Promises effectively use chaining.
+    getPromise()
+      .then(logA)
+      .then(logB);
+
+    //This is how fetch works:
+    fetch('api/user.json')
+      .then((response) => response.json())
+      .then((user) => user)
+
+    //Now lets look at the callback hell example but using promises.
+    //We can use the power of Promise chaining to:
+      //make an async call for a user
+      //make an async call to get weather based on user location
+      //Update the UI
+
+        function showError(e) {
+          console.warn("Error", e);
+        }
+
+        function updateUI(info) {
+          $("#app").text(JSON.stringify(info));
+        }
+
+        function getLocationURL([city, state]) {
+          return `https://api.openweathermap.org/data/2.5/forecast?q=${city},${state}&APPID=7c748e66ec4489f390a888a83eb4a0f4`;
+        }
+
+        function getUser(id) {
+          return new Promise((resolve, reject) => {
+            $.getJSON({
+              url: `https://api.github.com/users/${id}`,
+              success: resolve,
+                //line above is having resolve pass the data in the chain
+              error: reject
+            });
+          });
+        }
+
+        function getWeather(user) {
+          return new Promise((resolve, reject) => {
+            $.getJSON({
+              url: getLocationURL(user.location.split(",")),
+              success(weather) {
+                resolve({ user, weather: weather.city });
+                //line above is having resolve pass certain data in the chain
+                //default here would just be the returned data from the getWeather
+                //We need to pass user down the chain, so change the default data
+                //resolve gets invoked itself by you, but you manually pass user, and weather
+              },
+              error: reject
+            });
+          });
+        }
+
+        $("#btn").on("click", () => {
+          getUser("tylermcginnis")
+            .then(getWeather) /*User data gets passed successfully 
+                              here b/c again chaining is being used
+                              and the data is being passed in through
+                              the resolve function in the previous promise
+                              in the chain*/
+            .then(data => {
+              updateUI(data);
+            })
+            .catch(showError);
+        });
+  
+  //You can see that one drawback to promises was having to drill data down
+  
+  //Async/Await
+  //async functions return a promise
+  /*Now that you’ve seen the benefit of Async/Await, let’s discuss some 
+  smaller details that are important to know. First, anytime you add async 
+  to a function, that function is going to implicitly return a promise.*/
+
+  async function getPromise(){}
+
+  const promise = getPromise()
+
+  /*Even though getPromise is literally empty, it’ll still return a promise 
+  since it was an async function.*/
+
+  /*If the async function returns a value, that value will also get wrapped 
+  in a promise. That means you’ll have to use .then to access it.*/
+
+    async function add (x, y) {
+      return x + y
+    }
+
+    add(2,3).then((result) => {
+      console.log(result) // 5
+    })
+
+  //So the example above, would really just become:
+
+  $("#btn").on("click", async () => {
+    try {
+      const user = await getUser('tylermcginnis')
+      const weather = await getWeather(user.location)
+  
+      updateUI({
+        user,
+        weather,
+      })
+    } catch (e) {
+      showError(e)
+    }
+  })
+
+  //Note that error handling is absent from async/await patterns.
+  //We still need to follow that promise model:
+    //Pending
+    //Fulfilled
+    //Rejected
+  //So we use a try/catch like you see above
