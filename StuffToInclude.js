@@ -550,6 +550,7 @@ console.log(a); //This will actually be [object Object] {a:1,b:2,c:3}
     console.log(foo[0]()); //10
     console.log(foo[1]()); //10
     console.log(foo[2]()); //10
+
   //This of course can be fixed or rectified by simply changing var to let
   //You could also implement an IIFE on the closure to capture each value of i
     let foo = [];
@@ -600,71 +601,159 @@ console.log(a); //This will actually be [object Object] {a:1,b:2,c:3}
   overwrite itself, and you can't assign the same variable twice. When 
   we use let, it's going to scope i to our curly brackets.*/
 
+
   //On fat arrow functions vs regular JS functions
+
+  /*In classic function expressions, the this keyword is bound to different values based on 
+  the context in which the function is called. Whereas arrow functions use the value of this 
+  in their lexical scope. This leads to very different behaviour.
+
+  What’s the difference between context and scope? The context is (roughly) the object that 
+  calls the function. And the scope is all the variables visible to a function where it is 
+  defined. One cares about how it is called, the other cares about how it is defined.*/
+
+  let obj = {
+    myVar: 'foo',
+    
+    myFunc: function() {
+      console.log(this.myVar)
+    }
+  }
+  obj.myFunc() // foo
+
+  /*obj is the object calling myFunc. It’s myFunc's context. So the value of this in myFunc 
+  is bound to obj. Context can be defined in different ways depending on how a function is 
+  called.*/
+
+  //This can lead to some awkwardness though:
+  let obj = {
+    myVar: 'foo',
+    
+    myFunc: function() { 
+      console.log(this.myVar)   
+   
+      setTimeout(function() {
+        console.log(this.myVar)
+      }, 1000)
+    }
+  }
+  obj.myFunc() // foo ... then... undefined
+
+  /*myFunc's value of this refers to obj. so logging myFunc.myVar from within that function 
+  correctly prints 'foo'. However, the second function is called by setTimeout — so its 
+  context is different. Its context is actually a Timeout object in Node or the window 
+  object in browsers. So although we probably meant for this still to refer to obj, we’ve 
+  lost our reference to it.*/
+
+  //To resolve the above, you would have to use .bind(), .call(), or .apply()
+  //...Or an arrow function
+
+  let obj = {
+    myVar: 'foo',
+    
+    myFunc: function() { 
+      console.log(this.myVar)  
+    
+      setTimeout(() => {
+        console.log(this.myVar)
+      }, 1000)
+    }
+  }
+  obj.myFunc() // foo ... then... foo
+
+  /*So immediately we can see that arrow functions are better suited for callbacks. But 
+  what happens if we try to use an arrow function as an object method?*/
+
+  let obj = {
+    myVar: 'foo',
+    
+    myFunc: () => { 
+      console.log(this.myVar)  
+    }
+  }
+  obj.myFunc() // undefined
+
+  /*You might expect this to refer to obj. But arrow functions don’t bind this to the 
+  object that called them. They just use the value of this in the scope in which they 
+  were defined. In this case, that’s the global object. So arrow functions are unusable 
+  for object methods!*/
+
   //While there are some similarities, some differences do exist:
   // (param1, param2, paramN) => expression
   // ES5
   var add = function(x, y) {
     return x + y;
   };
-// ES6
-  let add = (x, y) => { return x + y };
-//The ES6 version is less code.
-//It can be even shorter if only one expression exists:
-  let add = (x, y) => x + y;
-//arguments do not have arguments binding
-/*However, they have access to the argument object of 
-  the closest non-arrow parent function ... what?*/
-/*Well, named and rest parameters are heavily relied upon 
-  to capture the arguments passed to arrow functions*/
-//In the case of a regular function:
-  let myFunc = {  
-   showArgs(){ 
-    console.log(...arguments); 
-   } 
-  }; 
-  myFunc.showArgs(1, 2, 3, 4); //logs and object of {0:1,1:2,2:3,3:4}
-//In the case of an arrow function:
-  let myFunc = {  
-    showArgs : () => { 
+
+  // ES6
+    let add = (x, y) => { return x + y };
+
+  //The ES6 version is less code.
+  //It can be even shorter if only one expression exists:
+    let add = (x, y) => x + y;
+
+  //arguments do not have arguments binding
+  /*However, they have access to the argument object of 
+    the closest non-arrow parent function ... what?*/
+  /*Well, named and rest parameters are heavily relied upon 
+    to capture the arguments passed to arrow functions*/
+
+  //In the case of a regular function:
+    let myFunc = {  
+     showArgs(){ 
+      console.log(...arguments); 
+     } 
+    }; 
+    myFunc.showArgs(1, 2, 3, 4); //logs and object of {0:1,1:2,2:3,3:4}
+
+  //In the case of an arrow function:
+    let myFunc = {  
+      showArgs : () => { 
      console.log(...arguments); 
-   } 
-  }; 
+     } 
+    }; 
   myFunc.showArgs(1, 2, 3, 4); //ReferenceError: arguments is not defined
+
 //Unlike regular functions, arrow functions do not have their own 'this'
+
   /*The value of this in an arrow function remains the same throughout the
     lifecycle of the function and always bound to the value of this in
     the closest non-arrow parent function.*/
   let me = { 
    name: "Ashutosh Verma", 
-       thisInArrow:() => { 
-     console.log("My name is " + this.name); // no 'this' binding here 
-   }, 
+   thisInArrow: () => { 
+        console.log("My name is " + this.name); // no 'this' binding here 
+      }, 
    thisInRegular(){ 
-       console.log("My name is " + this.name); // 'this' binding works here 
-     } 
+          console.log("My name is " + this.name); // 'this' binding works here 
+      } 
     };
    me.thisInArrow(); //My name is
    me.thisInRegular(); //My name is Ashutosh Verma
+
   //This is actually a good thing b/c it resolves the this pointer uncertainty:
   var message = "Hello World";
-  function printMessage(){
-   console.log(this.message);
-  };
-  var jsObject = {
-     printMessageES5:function (){
+
+  function printMessage() {
     console.log(this.message);
-   }
+  };
+
+  var jsObject = {
+     printMessageES5: function() {
+        console.log(this.message);
+    }
   };
   printMessage();               // output: Hello World
   jsObject.printMessageES5();   // output: undefined
+
   /*So, when our code looked for a variable named message in jsObject, 
   it couldn't find it. Let's fix the code and add the message variable 
   in our object.*/
   var message = "Hello World";
-  function printMessage(){
+  function printMessage() {
    console.log(this.message);
   };
+
   var jsObject = {
     message: this.message,
     printMessageES5:function (){
@@ -677,21 +766,27 @@ console.log(a); //This will actually be [object Object] {a:1,b:2,c:3}
 jsObject, the this pointer was still pointing to the global object.
 But earlier, when the same this pointer was used inside the function, 
 it was pointing somewhere else, i.e. to our jsObject.*/
-//Gospel by Mitch: Arrow function more carefully follows the chain, and sticks to what it is surrounded by.
-/*If you are accessing the this pointer in your function and you want it to point to the surrounding 
-code of the function definition, use the arrow syntax.*/
+
+/*Gospel by Mitch: Arrow function more carefully follows the chain, and sticks to 
+what it is surrounded by.*/
+
+/*If you are accessing the this pointer in your function and you want it to point to the 
+surrounding code of the function definition, use the arrow syntax.*/
     var message = "Hello World";
-    function printMessage(){
+
+    function printMessage() {
     console.log(this.message);
     };
+
     var jsObject = {
-    message: "Hello Object",
-    printMessageES5:function (){
-    console.log(this.message);
-    },
-    printMessageES6:() => {
-    console.log(this.message);
-    }
+      message: "Hello Object",
+      printMessageES5: function() {
+        console.log(this.message);
+      },
+
+      printMessageES6:() => {
+        console.log(this.message);
+      }
     };
     printMessage();               // output: Hello World
     jsObject.printMessageES5();   // output: Hello Object
@@ -946,252 +1041,3 @@ console.log(b); //Unexpected token error
 
     /*With curried functions you get easier reuse of more abstract functions, since you get 
     to specialize. Let's say that you have an adding function*/
-
-  //Callbacks; Promises; Asynchronous Callbacks; Async/Await:
-    /*Aside: Because JavaScript is a synchronous language by design, and because the event loop 
-    is implemented in the JavaScript engines that are part of browsers and application servers, 
-    all of the asynchronous functionality in JavaScript is implemented in external libraries. 
-    In fact, even commonly used asynchronous functions like setTimeout() are provided by 
-    libraries and interfaces.*/
-
-    //Main thing to keep in mind is that not all callbacks are asynchronous.
-  //But all async functions have callbacks.
-
-  //Well what is a callback?
-  //def: A function that executes after another function has executed
-  //Tall tale signs of a callback is where a function is passed as a param
-
-  //Example:
-  function doHomework(subject, callback) {
-    console.log(`Starting my ${subject} homework.`);
-    callback();
-  }
-  
-  doHomework('math', function() {
-    console.log('Finished my homework');
-  });
-
-  //Callbacks don't always have to be in the function call though:
-  function doMoreHomework(subject, callback) {
-    console.log(`Starting my ${subject} homework.`);
-    callback();
-  }
-
-  function alertFinished(){
-    console.log('Finished my homework');
-  }
-
-  doMoreHomework('math', alertFinished);
-
-  //Remember what these are called though in reference:
-
-  //Any function that receives another function as an argument is:
-    //Higher Order Function
-  
-  //And any function passed in as that argument is:
-    //Callback function
-
-  function higherOrderFunction(x, callback) {
-    return callback()
-  }
-
-  //Common example of callbacks:
-    //.map
-    //setTimeout
-    //Click events
-      /*This is b/c a callback says not to continue on the synchronous
-      thread of JS until something gets resolved. So something like a 
-      click events says, don't do this other thing until someone clicks a 
-      certain button.*/
-
-  //A traditional, async callback from JQUERY's getJSON method looks like this:
-    const id = 'tylermcginnis'
-
-    $.getJSON({
-      url: `https://api.github.com/users/${id}`,
-      success: updateUI,
-      error: showError,
-    });
-
-    //Note how there are two paths that make it an async callback:
-      //success: if the api call is successful follow that path.
-      //error: if there is an error, follow that path.
-
-  //Callbacks though of course can have issues such as callback hell:
-      const id = 'tylermcginnis'
-
-      $("#btn").on("click", () => {
-        $.getJSON({
-          url: `https://api.github.com/users/${id}`,
-          success: (user) => {
-            $.getJSON({
-              url: getLocationURL(user.location.split(',')),
-              success (weather) {
-                updateUI({
-                  user,
-                  weather: weather.query.results
-                })
-              },
-              error: showError,
-            })
-          },
-          error: showError
-        })
-      })
-
-    //Our brains think sequentially. 
-    //So asynchronous callbacks become very difficult for our brains to follow
-
-    //That is where Promises come in, which make more sense to our brains.
-    /*This is b/c, again, the callbacks above happen asynchronously, which
-    makes it tough for our brains to follow because it bounces from callback
-    to callback. Promises on the other hand are always in one of three states
-    that are easy for our brains to manage:*/
-      //Pending
-      //Fulfilled
-      //Rejected
-
-    //When you make an asynchronous request with a promise, the status is pending
-    //If successful, status becomes fulfilled and rejected if it fails.
-
-    //Template:
-    const promise = new Promise((resolve, reject) => {
-      resolve();
-      reject();
-    }); //create a new instance of Promise constructor
-        //It will either be resolved, or rejected
-
-    //Example:
-    function onSuccess () {
-      console.log('Success!')
-    }
-    
-    function onError () {
-      console.log('💩')
-    }
-    
-    const promise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve() //changed Promise status to fufilled on line 123
-      }, 2000)
-    })
-    
-    promise.then(onSuccess)
-    promise.catch(onError)
-
-    //Promises effectively use chaining.
-    getPromise()
-      .then(logA)
-      .then(logB);
-
-    //This is how fetch works:
-    fetch('api/user.json')
-      .then((response) => response.json())
-      .then((user) => user)
-
-    //Now lets look at the callback hell example but using promises.
-    //We can use the power of Promise chaining to:
-      //make an async call for a user
-      //make an async call to get weather based on user location
-      //Update the UI
-
-        function showError(e) {
-          console.warn("Error", e);
-        }
-
-        function updateUI(info) {
-          $("#app").text(JSON.stringify(info));
-        }
-
-        function getLocationURL([city, state]) {
-          return `https://api.openweathermap.org/data/2.5/forecast?q=${city},${state}&APPID=7c748e66ec4489f390a888a83eb4a0f4`;
-        }
-
-        function getUser(id) {
-          return new Promise((resolve, reject) => {
-            $.getJSON({
-              url: `https://api.github.com/users/${id}`,
-              success: resolve,
-                //line above is having resolve pass the data in the chain
-              error: reject
-            });
-          });
-        }
-
-        function getWeather(user) {
-          return new Promise((resolve, reject) => {
-            $.getJSON({
-              url: getLocationURL(user.location.split(",")),
-              success(weather) {
-                resolve({ user, weather: weather.city });
-                //line above is having resolve pass certain data in the chain
-                //default here would just be the returned data from the getWeather
-                //We need to pass user down the chain, so change the default data
-                //resolve gets invoked itself by you, but you manually pass user, and weather
-              },
-              error: reject
-            });
-          });
-        }
-
-        $("#btn").on("click", () => {
-          getUser("tylermcginnis")
-            .then(getWeather) /*User data gets passed successfully 
-                              here b/c again chaining is being used
-                              and the data is being passed in through
-                              the resolve function in the previous promise
-                              in the chain*/
-            .then(data => {
-              updateUI(data);
-            })
-            .catch(showError);
-        });
-  
-  //You can see that one drawback to promises was having to drill data down
-  
-  //Async/Await
-  //async functions return a promise
-  /*Now that you’ve seen the benefit of Async/Await, let’s discuss some 
-  smaller details that are important to know. First, anytime you add async 
-  to a function, that function is going to implicitly return a promise.*/
-
-  async function getPromise(){}
-
-  const promise = getPromise()
-
-  /*Even though getPromise is literally empty, it’ll still return a promise 
-  since it was an async function.*/
-
-  /*If the async function returns a value, that value will also get wrapped 
-  in a promise. That means you’ll have to use .then to access it.*/
-
-    async function add (x, y) {
-      return x + y
-    }
-
-    add(2,3).then((result) => {
-      console.log(result) // 5
-    })
-
-  //So the example above, would really just become:
-
-  $("#btn").on("click", async () => {
-    try {
-      const user = await getUser('tylermcginnis')
-      const weather = await getWeather(user.location)
-  
-      updateUI({
-        user,
-        weather,
-      })
-    } catch (e) {
-      showError(e)
-    }
-  })
-
-  //Note that error handling is absent from async/await patterns.
-  //We still need to follow that promise model:
-    //Pending
-    //Fulfilled
-    //Rejected
-  //So we use a try/catch like you see above
