@@ -831,6 +831,7 @@ func(); //returns window object, even as an arrow function
       }
     }
     objTwo.checkThis();
+
 //The way to resolve this is not with an arrow function but as follows:
     let objThree = {
       checkThis: function() {
@@ -844,16 +845,18 @@ func(); //returns window object, even as an arrow function
     }
     objThree.checkThis();
 
-    //Another way to deal with this though could be using these methods:
-  //call()
-  //bind()
-  //apply()
+  //Another way to deal with this though could be using these methods:
+    //call()
+    //bind()
+    //apply()
 //As you know, functions are a type of object
 //So there are lots of methods that come attached to a function object:
 function asim() {
   console.log(this);
 }
+
 console.log(asim.name); //returns asim
+
 //You can even add properties as an object:
 asim.moo = 1;
 //call() stabilizes the value of this. so:
@@ -872,6 +875,7 @@ let obj = {
   }
 }
 obj.checkThis();
+
 //You can also pass parameters to call(). 
 //Parameters will be anything after the first parameter, which determines 'this'
 function a(b,c,d) {
@@ -895,6 +899,7 @@ a.call(1,2,3,4);
     }
     return total
   }
+  
   let nums = [13,45,63,1,4,755];
   console.log(sum.call(null, nums)); //NaN
     //call() would still work if the listed numbers were passed directly in as arguments
