@@ -115,7 +115,7 @@ Fourth. When the document is completely parsed, the document. Ready State proper
 
 Fifth. any scripts that had the defer attribute set or executed in the order in which they appeared in the document. Async scripts may also be executed at this time
 
-Sixth. the browser then fires a domcontentloaded event on the document object. This marks the transition from synchronous script execution phase to the asynchronous event-driven phase of program execution.
+Sixth. the browser then fires a DOMContentLoaded event on the document object. This marks the transition from synchronous script execution phase to the asynchronous event-driven phase of program execution.
 
 Seventh. the document is completely parsed at this point but the browser may still be waiting for additional content, such as images, to load when all such content finishes loading oh, the document. Ready State property changes to complete.
 
