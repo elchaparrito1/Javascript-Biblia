@@ -1046,3 +1046,29 @@ console.log(b); //Unexpected token error
 
     /*With curried functions you get easier reuse of more abstract functions, since you get 
     to specialize. Let's say that you have an adding function*/
+
+
+
+    let arr =[-6, -3, -2, -1, 0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 14, 15, 17, 18, 19, 20]
+
+    const intFormat = (array) => {
+      let newChunk = [];
+      
+      for (let i = 0; i <= array.length; i++) {
+        var tempChunk = [];
+        if (array[i] + 1 == array[i + 1]) {
+          tempChunk.push(array[i]);
+          console.log(tempChunk);
+        } else {
+          newChunk.push(array[i]);
+          newChunk.push([tempChunk]);
+          tempChunk = [];
+        }
+            
+
+      }
+        
+          return newChunk;
+    }
+
+    intFormat(arr);

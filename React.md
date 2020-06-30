@@ -142,11 +142,9 @@ At its core, it maintains a tree for you, or the virtual dom, which is able to p
 
 React allows you to effectively re-construct your DOM in JavaScript and push only those changes to the DOM which have actually occurred.
 
-JSX is just syntactic sugar, taking things like const tag - <h1>Hello</h1>
+JSX is just syntactic sugar, taking things like const tag - <h1>Hello</h1> and using React.createElement() to create just plain old javascript objects. If you do createElement() in the browser, you will see an object get generated.
 
-and using React.createElement() to create just plain old javascript objects. If you do createElement() in the browser, you will see an object get generated.
-
-But, now that we have a hug object of React elements, how would say our App component makes these into actual dom elements?
+But, now that we have a huge object of React elements, how would say our App component make these into actual dom elements?
 
 ReactDOM in turn, recursively creates nodes depending on their 'type' property and appends them finally to the DOM.
 
@@ -228,7 +226,7 @@ Initialization:
           // Calling the constructor of  
           // Parent Class React.Component 
           super(props);  
-            
+
           // Setting the initial state 
           this.state = { date : new Date() };  
       } 
@@ -268,3 +266,75 @@ Unmounting:
   This is the final phase of the lifeycle of the component that is the phase of unmounting the component from the DOM. The following function is the sole member of this phase.
 
   componentWillUnmount() Function: This function is invoked before the component is finally unmounted from the DOM i.e. this function gets invoked once before the component is removed from the page and this denotes the end of the lifecycle.
+
+
+React Fragments:
+  A common pattern in React is for a component to return multiple elements. Fragments let you group a list of children without adding extra nodes to the DOM.
+
+  A common pattern is for a component to return a list of children. Take this example React snippet:
+
+    ```JS
+    class Table extends React.Component {
+      render() {
+        return (
+          <table>
+            <tr>
+              <Columns />
+            </tr>
+          </table>
+        );
+      }
+    }
+    ```
+
+    <Columns /> would need to return multiple <td> elements in order for the rendered HTML to be valid. If a parent div was used inside the render() of <Columns />, then the resulting HTML will be invalid.
+
+    ```JS
+    class Columns extends React.Component {
+      render() {
+        return (
+          <div>
+            <td>Hello</td>
+            <td>World</td>
+          </div>
+        );
+      }
+    }
+    ```
+
+    results in a <Table /> output of:
+  
+    <table>
+      <tr>
+        <div>
+          <td>Hello</td>
+          <td>World</td>
+        </div>
+      </tr>
+    </table>
+
+    Fragments solve this problem.
+
+    ```JS
+    class Columns extends React.Component {
+      render() {
+        return (
+          <>
+            <td>Hello</td>
+            <td>World</td>
+          </>
+        );
+      }
+    }
+    ```
+
+    which results in a correct <Table /> output of:
+    
+    <table>
+      <tr>
+        <td>Hello</td>
+        <td>World</td>
+      </tr>
+    </table>
+
+ComponentDidUpdate() vs React's built-in Diffing Algorithm - read this article: https://thoughtbot.com/blog/react-rendering-misconception
