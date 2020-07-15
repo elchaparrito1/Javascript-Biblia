@@ -1,3 +1,98 @@
+React Book:
+
+Chapter 2 - ES6
+
+Not all web browsers support ES6, and even those that do don’t support everything. The only way to be sure that your ES6 code will work is to convert it to ES5 code before running it in the browser. This process is called transpiling. One of the most popular tools for transpiling is Babel.
+
+In the past, the only way to use the latest JavaScript features was to wait weeks, months, or even years until browsers supported them. Now, transpiling has made it possible to use the latest features of JavaScript right away. The transpiling step makes JavaScript similar to other languages. Transpiling is not compiling: our code isn’t compiled to binary. Instead, it’s transpiled into syntax that can be interpreted by a wider range of browsers. Also, JavaScript now has source code, meaning that there will be some files that belong to your project that don’t run in the browser.
+
+Chapter 3 - Functional Programming with JavaScript
+
+If you are wondering where this functional trend came from, the answer is the 1930s, with the invention of lambda calculus, or λ-calculus.1 Functions have been a part of calculus since it emerged in the 17th century. Functions can be sent to functions as arguments or returned from functions as results. More complex functions, called higher-order functions, can manipulate functions and use them as either arguments or results or both. In the 1930s, Alonzo Church was at Princeton experimenting with these higher-order functions when he invented lambda calculus.
+
+What is a lambda function you might ask?
+
+Lambda can have different meanings depending on who you're talking to or what you're talking about. In the context of JavaScript it usually refers to an anonymous function. That is a function that doesn't get named, but is usually used as a value passed to another function in order pass a behavior as a value.
+
+JavaScript supports functional programming because JavaScript functions are first- class citizens. This means that functions can do the same things that variables can do.
+
+Since functions are variables, we can add them to objects:
+```JS
+const obj = {
+  message: "They can be added to objects like variables", 
+  log(message) {
+    console.log(message) }
+}
+
+obj.log(obj.message);
+```
+They can be added to objects like variables
+
+They can also be returned from other functions, just like variables:
+```JS
+var createScream = function(logger) { 
+  return function(message) {
+logger(message.toUpperCase() + "!!!") }
+}
+const scream = createScream(message => console.log(message))
+    scream('functions can be returned from other functions')
+    scream('createScream returns a function')
+    scream('scream invokes that returned function')
+```
+    // FUNCTIONS CAN BE RETURNED FROM OTHER FUNCTIONS!!!
+    // CREATESCREAM RETURNS A FUNCTION!!!
+    // SCREAM INVOKES THAT RETURNED FUNCTION!!!
+The last two examples were of higher-order functions, functions that either take or return other functions. Using ES6 syntax, we could describe the same createScream higher-order function with arrows:
+```JS
+const createScream = logger => message => logger(message.toUpperCase() + "!!!")
+```
+From here on out, we need to pay attention to the number of arrows used during function declaration. More than one arrow means that we have a higher-order function.
+
+We can say that JavaScript is a functional language because its functions are first-class citizens. This means that functions are data. They can be saved, retrieved, or flow through your applications just like variables.
+
+Imperative vs Declarative
+
+Functional programming is a part of a larger programming paradigm: declarative pro‐ gramming. Declarative programming is a style of programming where applications are structured in a way that prioritizes describing what should happen over defining how it should happen.
+
+Let’s examine an imperative approach to this task:
+```JS
+var string = "This is the midday show with Cheryl Waters"; 
+var urlFriendly = "";
+
+for (var i = 0; i < string.length; i++) { if (string[i] === " ") {
+urlFriendly += "-"; }else{
+        urlFriendly += string[i];
+      }
+} console.log(urlFriendly);
+```
+In this example, we loop through every character in the string, replacing spaces as they occur. The structure of this program is only concerned with how such a task can be achieved. We use a for loop and an if statement, and set values with an equality operator. Just looking at the code alone does not tell us much. Imperative programs require lots of comments in order to understand what is going on.
+Now let’s look at a declarative approach to the same problem:
+```JS
+const string = "This is the mid day show with Cheryl Waters" const urlFriendly = string.replace(/ /g, "-")
+console.log(urlFriendly)
+```
+
+Here we are using string.replace along with a regular expression to replace all instances of spaces with hyphens. Using string.replace is a way of describing what is supposed to happen: spaces in the string should be replaced. The details of how spaces are dealt with are abstracted away inside the replace function. In a declarative program, the syntax itself describes what should happen and the details of how things happen are abstracted away.
+
+```JS
+const { render } = ReactDOM
+const Welcome = () => ( <div id="welcome">
+            <h1>Hello World</h1>
+        </div>
+)
+    render(
+        <Welcome />,
+document.getElementById('target') 
+)
+```
+
+Now we need to introduce the core concepts of functional programming: immutability, purity, data transformation, higher-order functions, and recursion.
+
+Immutability
+To mutate is to change, so to be immutable is to be unchangeable. In a functional pro‐ gram, data is immutable. It never changes.
+
+/////////////////////////////////////////////////////////////////////////////////
+
 Create-react-app file structure:
   Package-lock.json just locks in the versions of the dependencies that we're using.
   ASIDE on lock files:

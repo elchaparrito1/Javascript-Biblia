@@ -120,3 +120,14 @@ Sixth. the browser then fires a DOMContentLoaded event on the document object. T
 Seventh. the document is completely parsed at this point but the browser may still be waiting for additional content, such as images, to load when all such content finishes loading oh, the document. Ready State property changes to complete.
 
 Eighth. from this point on, event handlers are invoked asynchronously in response to user input events, generic events, timer expirations, and so on.
+
+13.6.2 the Same-Origin Policy
+
+The same origin policy
+Is a sweeping security restriction on what web content JavaScript code can interact with.
+
+Specifically, a script can read only the properties of Windows and documents that have the same origin as the document that contains the script.
+
+The origin of a document is defined as the protocol, host, import of the URL from which the document was loaded. Documents loaded from different web servers have different Origins.
+
+In fact, documents loaded through different ports of the same hosts have different Origins. And a document loaded with the HTTP protocol has a different origin than one loaded with the HTTP protocol even if they come from the same web server.
