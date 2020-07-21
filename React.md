@@ -91,6 +91,133 @@ Now we need to introduce the core concepts of functional programming: immutabili
 Immutability
 To mutate is to change, so to be immutable is to be unchangeable. In a functional pro‐ gram, data is immutable. It never changes.
 
+Let’s consider an array of color names:
+```JS
+letlist=[
+{ title: "Rad Red"}, { title: "Lawn"},
+{ title: "Party Pink"}
+]
+```
+We could create a function that will add colors to that array using Array.push:
+```JS
+var addColor = function(title, colors) { colors.push({ title: title })
+return colors;
+}
+console.log(addColor("Glam Green", list).length)
+console.log(list.length)
+```
+
+However, Array.push is not an immutable function. This addColor function changes the original array by adding another field to it. In order to keep the colors array immutable, we must use Array.concat instead:
+```JS
+const addColor = (title, array) => array.concat({title}) console.log(addColor("Glam Green", list).length) // 4
+console.log(list.length) // 3
+```
+Array.concat concatenates arrays. In this case, it takes a new object, with a new color
+title, and adds it to a copy of the original array.
+
+Or, you can do it the ES6 way:
+```JS
+const addColor = (title, list) => [...list, {title}]
+```
+
+Pure Functions
+A pure function is a function that returns a value that is computed based on its argu‐ ments. Pure functions take at least one argument and always return a value or another function. They do not cause side effects, set global variables, or change any‐ thing about application state. They treat their arguments as immutable data.
+
+Now let’s examine an impure function that mutates the DOM:
+```JS
+function Header(text) {
+  let h1 = document.createElement('h1'); 
+  h1.innerText = text; 
+  document.body.appendChild(h1);
+}
+
+Header("Header() caused side effects");
+```
+This function is impure. It does not return a function or a value, and it causes side effects: a changed DOM.
+
+Pure functions are another core concept of functional programming. They will make your life much easier because they will not affect your application’s state. When writing functions, try to follow these three rules:
+  1. The function should take in at least one argument.
+  2. The function should return a value or another function.
+  3. The function should not change or mutate any of its arguments.
+
+How does anything change in an application if the data is immutable? Functional programming is all about transforming data from one form to another. 
+
+You do not need a special framework to understand how to produce one dataset that is based upon another. JavaScript already has the necessary tools for this task built into the language. There are two core functions that you must master in order to be proficient with functional JavaScript: Array.map and Array.reduce.
+
+Also, Array.filter
+
+Array.filter is a built-in JavaScript function that produces a new array from a source array. This function takes a predicate as its only argument. A predicate is a function that always returns a Boolean value: true or false. Array.filter invokes this predicate once for every item in the array. That item is passed to the predicate as an argument and the return value is used to decide if that item shall be added to the new array.
+
+Another array function that is essential to functional programming is Array.map. Instead of a predicate, the Array.map method takes a function as its argument. This function will be invoked once for every item in the array, and whatever it returns will be added to the new array:
+
+```JS
+const highSchools = schools.map(school => `${school} High School`) 
+console.log(highSchools.join("\n"))
+```
+
+So .map is a big part of pure function programming, because it takes an old array, and generates a new one, running the callback function on each iteration of an array.
+
+If you need to transform an array into an object, you can use Array.map in conjunc‐ tion with Object.keys. Object.keys is a method that can be used to return an array of keys from an object.
+
+Let’s say we needed to transform schools object into an array of schools:
+```JS
+const schools = { 
+  "Yorktown": 10, 
+  "Washington & Lee": 2, 
+  "Wakefield": 5
+}
+
+const schoolArray = Object.keys(schools).map(key => ({
+    name: key,
+    wins: schools[key]
+            })
+) 
+
+console.log(schoolArray);
+// [ // {
+    //     name: "Yorktown",
+    //     wins: 10
+    //   },
+    //   {
+    //     name: "Washington & Lee",
+    //     wins: 2
+    //   },
+    //   {
+    //     name: "Wakefield",
+    //     wins: 5
+    //   }
+    // ]
+```
+
+The final tool in our functional programming tool belt is the reduce method. 
+
+Reduce can be used to transform an array into any value, including a number, string, boolean, object, or even a function.
+
+Let’s say we needed to find the maximum number in an array of numbers. We need to transform an array into a number; therefore, we can use reduce:
+```JS
+const ages = [21,18,42,40,64,63,34];
+
+const maxAge = ages.reduce((max, age) => { 
+  console.log(`${age} > ${max} = ${age > max}`); 
+    if (age>max) {
+    return age 
+    } else {
+      return max }
+    }, 0)
+
+  console.log('maxAge', maxAge);
+
+    // 21 > 0 = true
+    // 18 > 21 = false
+    // 42 > 21 = true
+    // 40 > 42 = false
+    // 64 > 42 = true
+    // 63 > 64 = false
+    // 34 > 64 = false
+    // maxAge 64
+```
+There is also the method reduceRight, which works the same way as Array.reduce; the dif‐ ference is that it starts reducing from the end of the array rather than the beginning.
+
 /////////////////////////////////////////////////////////////////////////////////
 
 Create-react-app file structure:
