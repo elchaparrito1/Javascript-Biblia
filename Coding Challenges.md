@@ -1,5 +1,69 @@
-//CoderByte Challenge: Factorial
+Big O Notation
+definition: A theoretical measure of the execution of an algorithm, usually the time or memory needed, given the problem size n, which is usually the number of items.
 
+tough understand and determine what type of big o an algorithm is when you're looking at it. Here are some shorthands though for determining big O:
+  1. Arithmetic operations are constant
+  2. Variable assignment is constant
+  3. Accessing elements in an array by index or object by key is constant
+  4. In a loop, the complexity is the length of the loop times the complexity of whatever happens inside the loop
+
+This all pertains to time complexity
+
+The other consideration should be the space complexity of an algorithm.
+
+Auxiliary Space Complexity refers to the space required by the algorithm, not including space taken up by the inputs. This is what we're talking about when we talk about space complexity.
+
+Rules of Thumb of space complexity
+  1. Most primitives (booleans, numbers, undefined, null) are constant space
+  2. Strings require O(n) space (where n is the string length); so the longer the string, the more space and time it will require
+  3. Reference types are generally O(n), where n is the length (for arrays) or the number of keys (for objects)
+
+Logarithms - a quantity representing the power to which a fixed number (the base) must be raised to produce a given number.
+
+This is the opposite of an exponential form so log^2 16 = 4. Meaning that 4 * 4 equals 16.
+
+Most common logs we work with are log^2 or base-10.
+
+So the logarithm of a number roughly measures the number of times you can divide that number by 2 before you get a value that's less than or equal to one.
+
+Objects - Big O
+Objects work great for big O in a few different ways:
+  Insertion - O(1)
+  Removal - O(1)
+  Searching - O(N) - Obviously, as you add more key/value pairs to an object, the more time complexity you'll have to add on to a search algorithm.
+  Access - O(1)
+
+When you don't need any ordering, objects are an excellent choice.
+
+Object methods for big O must also be considered:
+  Object.keys - O(N)
+  Object.values - O(N)
+  Object.entries - O(N)
+  hasOwnProperty - O(1)
+
+Arrays - Big O
+Arrays actually come at a cost to Big O:
+  Insertion - It depends... If we use things like .push, it would be O(1), b/c it just goes right on the end. Methods like .shift cause O(n) b/c JS then has to change the indices of all items in the array, and the more values in the array, the longer it will take.
+  Removal - It depends... Same as the above.
+  Searching - O(N)
+  Access - O(1)
+
+Arrays allow you to order your data more succinctly, but this order comes at a cost.
+
+Array methods for big O must also be considered:
+  Array.push - O(1)
+  Array.pop - O(1)
+  Array.shift - O(N)
+  Array.unshift - O(N)
+  Array.concat - O(N)
+  Array.splice - O(N)
+  Array.slice - O(N)
+  Array.sort - O(N * log N)
+  Array.forEach/map/filter/reduce - O(N) 
+
+
+CoderByte Challenge: Factorial
+```js
     function FirstFactorial(num) { 
 
         if (num < 0) return;
@@ -14,9 +78,10 @@
             //So you first determine if the reduced num is less than zero
             //Then, if it has reached zero
             //Finally, you recursively call the function itself until all conditions are met
+```
 
-//CoderByte Challenge: Longest Word
-
+CoderByte Challenge: Longest Word
+```js
     function LongestWord(sen) { 
         let arr = [];
         
@@ -30,6 +95,7 @@
 
         // keep this function call here 
         console.log(LongestWord(readline()));
+```
         //Note that you used for/of instead of for/in loop.
             //While arrays can use for/in loop, they should use for/of, which iterates over values
         //Regex is then used to replace on special characters with, well, nothing

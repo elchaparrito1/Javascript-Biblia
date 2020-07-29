@@ -218,6 +218,137 @@ const maxAge = ages.reduce((max, age) => {
 ```
 There is also the method reduceRight, which works the same way as Array.reduce; the dif‐ ference is that it starts reducing from the end of the array rather than the beginning.
 
+The use of higher-order functions is also essential to functional programming. 
+
+The first category of higher-order functions are functions that expect other functions as arguments. Array.map, Array.filter, and Array.reduce all take functions as arguments. They are higher-order functions.
+
+Let’s take a look at how we can implement a higher-order function. In the following example, we create an invokeIf callback function that will test a condition and invoke on callback function when it is true and another callback function when that condition is false:
+
+```JS
+const invokeIf = (condition, fnTrue, fnFalse) => (condition) ? fnTrue() : fnFalse()
+const showWelcome = () => console.log("Welcome!!!")
+const showUnauthorized = () => console.log("Unauthorized!!!")
+
+invokeIf(true, showWelcome, showUnauthorized) 
+invokeIf(false, showWelcome, showUnauthorized)
+// "Welcome"
+// "Unauthorized"
+```
+
+invokeIf expects two functions: one for true, and one for false. This is demonstrated by sending both showWelcome and showUnauthorized to invokeIf. When the condi‐ tion is true, showWelcome is invoked. When it is false, showUnauthorized is invoked.
+
+Currying is a functional technique that involves the use of higher-order functions.
+
+The following is an example of currying. The userLogs function hangs on to some information (the username) and returns a function that can be used and reused when the rest of the information (the message) is made available. In this example, log messages will all be prepended with the associated username. Notice that we’re using the getFakeMembers function that returns a promise from Chapter 2:
+
+```js
+const userLogs = userName => message => console.log(`${userName} -> ${message}`)
+  
+const log = userLogs("grandpa23");
+
+log("attempted to load 20 fake members") 
+getFakeMembers(20).then(
+  members => log(`successfully loaded ${members.length} members`),
+  error => log("encountered an error loading members") 
+)
+
+// grandpa23 -> attempted to load 20 fake members 
+// grandpa23 -> successfully loaded 20 members
+
+// grandpa23 -> attempted to load 20 fake members 
+// grandpa23 -> encountered an error loading members
+```
+
+userLogs is the higher-order function. The log function is produced from userLogs, and every time the log function is used, “grandpa23” is prepended to the message.
+
+Recursion
+Recursion is a technique that involves creating functions that recall themselves. Often when faced with a challenge that involves a loop, a recursive function can be used instead. Consider the task of counting down from 10. We could create a for loop to solve this problem, or we could alternatively use a recursive function. In this example, countdown is the recursive function:
+```js
+const countdown = (value, fn) => { 
+  fn(value)
+  return (value > 0) ? countdown(value-1, fn) : value 
+}
+countdown(10, value => console.log(value));
+    // 10
+    // 9
+    // 8
+    // 7
+    // 6
+    // 5
+    // 4
+    // 3
+    // 2
+    // 1
+    // 0
+```
+
+Recursion is another functional technique that works well with asynchronous pro‐ cesses. Functions can recall themselves when they are ready.
+
+Recursion is a good technique for searching data structures. You can use recursion to iterate through subfolders until a folder that contains only files is identified. You can also use recursion to iterate though the HTML DOM until you find an element that does not contain any children. In the next example, we will use recursion to iterate deeply into an object to retrieve a nested value:
+
+```js
+var dan = {
+      type: "person",
+      data: {
+          gender: "male",
+          info: {
+            id: 22,
+            fullname: {
+              first: "Dan",
+              last: "Deacon"
+            }
+          } 
+        }
+}
+
+const deepPick = (fields, object={}) => {
+  const [first, ...remaining] = fields.split(".") 
+  return (remaining.length) ?
+deepPick(remaining.join("."), object[first]) : 
+object[first]
+}
+
+deepPick("type", dan); // "person"
+deepPick("data.info.fullname.first", dan); // "Dan"
+
+// First Iteration
+  // first = "data"
+  // remaining.join(".") = "info.fullname.first"
+  // object[first] = { gender: "male", {info} }
+
+// Second Iteration
+  // first = "info"
+  // remaining.join(".") = "fullname.first"
+  // object[first] = {id: 22, {fullname}} 
+
+// Third Iteration
+  // first = "fullname"
+  // remaining.join("." = "first"
+  // object[first] = {first: "Dan", last: "Deacon" }
+
+//Finally...
+  // first = "first" 
+  // remaining.length = 0 
+  // object[first] = "Deacon"
+```
+
+Composition
+Functional programs break up their logic into small pure functions that are focused on specific tasks. Eventually, you will need to put these smaller functions together. Specifically, you may need to combine them, call them in series or parallel, or com‐ pose them into larger functions until you eventually have an application.
+
+When it comes to composition, there are a number of different implementations, pat‐ terns, and techniques. One that you may be familiar with is chaining. In JavaScript, functions can be chained together using dot notation to act on the return value of the previous function.
+
+Strings have a replace method. The replace method returns a template string which also will have a replace method. Therefore, we can chain together replace methods with dot notation to transform a string.
+```js
+const template = "hh:mm:ss tt"
+const clockTime = template.replace("hh", "03")
+                          .replace("mm", "33") 
+                          .replace("ss", "33") 
+                          .replace("tt", "PM")
+console.log(clockTime) // "03:33:33 PM"
+```
+In this example, the template is a string. By chaining replace methods to the end of the template string, we can replace hours, minutes, seconds, and time of day in the string with new values. The template itself remain intact and can be reused to create more clock time displays.
+
+Chaining is one composition technique, but there are others. The goal of composition is to “generate a higher order function by combining simpler functions.”4
 /////////////////////////////////////////////////////////////////////////////////
 
 Create-react-app file structure:
