@@ -61,6 +61,380 @@ Array methods for big O must also be considered:
   Array.sort - O(N * log N)
   Array.forEach/map/filter/reduce - O(N) 
 
+Steps to solving most any coding challenge:
+  1 Understand the Problem
+    Important questions to ask in order to ensure you understand the problem:
+      1. Can you restate the problem in your own words?
+      2. What are the inputs that should go into the problem?
+      3. What are the outputs that should come from the solution?
+      4. Can the outputs be determined from the inputs? In other words, do I have enough information to solve the problem?
+      5. How should I label the important pieces of data that are a part of the problem?
+
+      An example problem: Write a function which takes two numbers and returns their sum.
+
+      1. Create a function that will take two number arguments and return the total of the sum of the two
+      2. ints? floats? what about strings or added arguments?
+      3. ints? floats?
+      4. It depends
+
+  2 Explore Concrete Examples
+    Coming up with examples help you understand problems better
+    They provide sanity checks
+
+    Steps to exploring examples:
+      1. Start with simple examples
+      2. Then progress to more complex examples
+      3. Explore examples with empty inputs
+      4. Explore examples with invalid inputs
+
+  3 Break It Down
+    Pseudo code or explicitly write out the steps you need to take. This forces you to think about the code you'll write before you write it, and helps you catch any lingering conceptual issues or misunderstandings before you dive in and have to worry about details.
+
+  4 Solve/Simplify
+    If you can't solve the problem. Solve a simpler version of the problem. This means ignoring the part that is giving you a really hard time. This at least shows progress in what you're trying to do.
+
+    The steps would be as follows:
+      -Find the core difficulty in what you're trying to do
+      -Temporarily ignore that difficulty
+      -Write a simplified solution
+      -Then incorporate that difficulty back in 
+
+  5 Look Back and Refactor
+    Always important to reflect on how the code could be improved.
+
+    Some important questions to ask after you've solved the problem:
+      Can you check the result?
+      Can you deive the result differently?
+      Can you understand it at a glance?
+      Can you use the result or method for some other problem?
+      Can you thing of other ways to refactor?
+      How have other people solved the problem?
+
+
+Next we'll go over patterns that you can follow or Problem Solving Patterns that often help in solving coding challenges:
+
+
+
+FREQUENCY COUNTERS PATTERN: This pattern uses objects or sets to collect values/frequencies of values. This can often avoid the need for nested loops or O(N^2) operations with arrays/strings.
+
+Example: Write a function called same, which accepts two arrays. The function should return true if every value in the array has it's corresponding value squared in the second array. The frequency of values must be the same.
+
+You solved this, but thinking of Big O, two things. First, you were using just the arrays and looping over one array and comparing it to the other. Objects are usually faster to work with than arrays. Second, always avoid nested loops. Two separate loops are always faster than a nested loop.
+
+So again. USE OBJECTS with FREQUENCY COUNTER questions/challenges to break down the data. Recall the anagram challenge where this applies.
+
+```JS
+const anagramCheck = (a,b) => {
+  //Convert each string into key/value pair object
+  if (a.length !== b.length) {
+    return false
+  }
+
+  let firstAnagram = {};
+  for (let str of a) {
+  firstAnagram[str] = firstAnagram[str] + 1 || 1
+  }
+
+  let secondAnagram = {};
+  for (let str of b) {
+  secondAnagram[str] = secondAnagram[str] + 1 || 1
+  }
+
+  //Loop over one object and determine if same key exists
+  //In same loop, determine if same value exists
+  for (let key in firstAnagram) {
+    if (firstAnagram[key] !== secondAnagram[key]) {
+      return false
+    }
+
+    if (!key in secondAnagram) {
+      return false
+    }
+  }
+  //Return true if yes, and false if no
+  return true
+}
+console.log(anagramCheck('disney', 'yensid'));
+
+```
+
+MULTIPLE POINTERS PATTERN: is creating pointers or values that correspond to an index or position and move towards the beginning, end or middle based on a certain condition. Very efficient for solving problems with minimal complexity.
+
+Example: Write a function called sumZero which accepts a sorted array of integers. The function should find the first pair where the sum is 0. Return an array that includes both values that sum to zero or undefined if a pair does not exist.
+
+So the multiple pointers recipe to follow would be the following:
+
+```JS
+  const sumZero = (arr) => {
+    let left = 0;
+    let right = arr.length - 1;
+    console.log(right);
+
+    while (left < right) {
+      let sum = arr[left] + arr[right];
+      if (sum == 0) {
+        return [arr[left], arr[right]]
+      } else if (sum > 0) {
+        right--
+      } else {
+        left++
+      }
+    }
+
+    return false
+  }
+
+  console.log(sumZero([-5,-4,-3,-2,-1,0,1,2,3,10,11]));
+```
+
+So we see how this can work with other challenges, where we have two pointers, but also, do not need to start at the beginning and end
+
+example: Implement a function called countUniqueValues, which accepts a sorted array, and counts the unique values in the array. There can be negative numbers in the array, but it will always be sorted.
+
+```JS
+  const countUniqueValues = (arr) => {
+    let obj = {}
+    
+    for (let num of arr) {
+      obj[num] = obj[num] + 1 || 1
+    }
+
+    return Object.keys(obj).length;
+  }
+
+const performance = require('perf_hooks').performance;
+const t0 = performance.now();
+ console.log(countUniqueValues([1,1,1,3,3,3,4,5,6,9,9,9,9,11,12,13]));
+const t1 = performance.now();
+console.log(`Call to doSomething took ${t1 - t0} milliseconds.`);
+
+const otherCountUniqueValues = (arr) => {
+  let i = 0;
+  let j = 1;
+  let count = 0;
+
+  while (j < arr.length) {
+    if (arr[i] !== arr[j]) {
+      count++;
+      i = j;
+      j++
+    } else {
+      j++
+    }
+  }
+
+  return count + 1;
+}
+
+const performance = require('perf_hooks').performance;
+const t0 = performance.now();
+console.log(otherCountUniqueValues([1,2,3,4,4,4,7,7,12,12,13]));
+const t1 = performance.now();
+console.log(`Call to doSomething took ${t1 - t0} milliseconds.`);
+```
+
+SLIDING WINDOW PATTERNS: This pattern involves creating a window which can either be an array or number from one position to another. Depending on a certain condition, the window either increases or closes (and a new window is created). Very useful for keeping track of a subset of data in an array/string.
+
+example: Write a function called maxSubarraySum which accepts an array of integers and a number called n. The function should calculate the maximum sum of n consecutive elements in the array.
+
+```JS
+  const maxSubarraySum = (arr,n) => {
+
+    if (n > arr.length) {
+      return null;
+    }
+
+    //Create max variable. Set to infinity in case all numbers are negative, b/c they'll be greater than -Infinity
+    let max = -Infinity
+
+    //Create nested loop to go over array
+    for (let i = 0; i < arr.length - n + 1; i++) {
+      temp = 0;
+      //note j loops number of times n is on one iteration of i
+      for (let j = 0; j < n; j++) {
+        console.log(j);
+        temp += arr[i + j];
+      }
+
+      //Compare window to max var to see which is more
+      //Save the one that is more to max window
+       if (temp > max) {
+         max = temp;
+       }
+    }
+    return max;
+  }
+
+  console.log(maxSubarraySum([1,2,5,2,8,1,5,9,3,4],3));
+```
+
+Lets say we have a million items though. This becomes inefficient when we consider Big 0. The above is not technically a sliding window either.
+
+Sliding Window:
+
+```JS
+  const maxSubarraySum = (arr, num) => {
+    let maxSum = 0, tempSum = 0;
+
+    if (num > arr.length) {
+      return null
+    }
+
+    for (let i = 0; i < num; i++) {
+      maxSum += arr[i];
+      console.log(maxSum)
+    }
+    tempSum = maxSum;
+
+    //Slide the window one place; minus front of array, add to end of array
+    for (let i = num; i < arr.length; i++) {
+      tempSum = tempSum - arr[i - num] + arr[i];
+      maxSum = Math.max(maxSum, tempSum);
+    }
+    return maxSum;
+  }
+
+  maxSubarraySum([2,6,9,2,1,8,5,6,3], 3);
+
+function maxSubarraySum(arr, num){
+  // add whatever parameters you deem necessary - good luck!
+  let maxSum = 0, tempSum = 0;
+
+  if (arr.length < num) {
+    return null
+  }
+
+  for (let i = 0; i < num; i++) {
+    maxSum += arr[i]
+  }
+  tempSum = maxSum;
+
+  for (let i = num; i < arr.length; i++) {
+    console.log(arr[i]);
+    tempSum = tempSum - arr[i - num] + arr[i];
+    maxSum = Math.max(maxSum, tempSum);
+  }
+
+  return maxSum;
+}
+
+maxSubarraySum([100,200,300,400], 2); //700
+maxSubarraySum([1,4,2,10,23,3,1,0,20], 4); //39
+maxSubarraySum([-3,4,0,-2,6,-1], 2); //5
+maxSubarraySum([2,3], 3); //null
+
+//or finding the longest substring of different characters in a string:
+
+function findLongestSubstring(str) {
+ 
+  let longest = 0, start = 0, seen = {};
+
+    for (let i = 0; i < str.length; i++) {
+      let char = str[i];
+      if (seen[char]) {
+        start = Math.max(start, seen[char])
+      }
+
+      longest = Math.max(longest, i - start + 1);
+      seen[char] = i + 1
+    }
+    return longest;
+
+}
+
+findLongestSubstring('rithmschool');
+```
+
+DIVIDE AND CONQUER Patterns: This pattern involves dividing a data set into smaller chunks and then repeating a process with a subset of data. This pattern can tremendously decrease time complexity
+
+RECURSION Patterns: A process (a function in our case) that calls itself.
+
+  Two things that must always be present with a recursive function:
+    1. Different Input - invoke the same function over and over, but with different data to test the function output.
+    2. Base Case - has to be a stopping point though, or the base case, if all pieces of data are tested.
+
+    classic example:
+
+    ```JS
+      const factorial = (num) => {
+        if (num === 1) return 1
+        
+        return num * factorial(num - 1);
+      }
+    ```
+
+  Common Recursive pitfalls
+    -no or wrong base case
+    -not returning anything from the base case
+    -stack overflow, or infinite call stack
+
+  
+  Recursion examples to review and understand: 
+
+  Recursion function that mimics Math.pow(); function should accept a base and an exponent (power(2,3) equals 8):
+  ```JS
+    function power(b,e) {
+     
+      if (e === 0) return b;
+
+      return b * power(b, e - 1);
+    }
+
+    console.log(power(2,3))
+  ```
+  Product of Array:
+  ```JS
+  function productOfArray(arr) {
+    if (arr.length === 0) return 1
+    
+    return arr[0] * productOfArray(arr.slice(1))
+  }
+
+  console.log(productOfArray([1,2,3]))
+  ```
+
+  Add up all numbers from zero to number:
+  ```JS
+  function recursiveRange(n){
+    if (n === 1) return 1
+    
+    return n + recursiveRange(n-1)
+  }
+
+  console.log(recursiveRange(8))
+  ```
+
+  Find Fibonacci number based on nth number provided:
+  ```JS
+  function fib(n) {
+    if (n <= 2) return 1;
+
+    return fib(n-1) + fib(n-2)
+  }
+
+  console.log(fib(10));
+  ```
+
+  Palindrome:
+  ```JS
+  function isPalindrome(str){
+    //First, we know that the string should be considered a palindrome if it contains just one character. Hence, a reasonable terminal condition would be when the string length is equal to 1.
+    console.log(str)
+    if(str.length === 1) return true;
+    //Second, we know that if the first and last characters do not match for a start, the string cannot be considered a palindrome.
+    if(str.length === 2) return str[0] === str[1];
+    //
+    if(str[0] === str.slice(-1)) return isPalindrome(str.slice(1,-1))
+    return false;
+}
+console.log(isPalindrome('noon'))
+  ```
+  
+
+Now HELPER METHOD RECURSION patter is where you have two functions. A helper function on the outside, and the recursion function on the inside.
+
+
+
 
 CoderByte Challenge: Factorial
 ```js
